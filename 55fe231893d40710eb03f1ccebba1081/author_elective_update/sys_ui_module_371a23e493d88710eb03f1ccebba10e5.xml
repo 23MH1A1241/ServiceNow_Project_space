@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_module">
+    <sys_ui_module action="DELETE">
+        <active>true</active>
+        <application display_value="Audit Logs">bf1a23e493d88710eb03f1ccebba10df</application>
+        <filter/>
+        <name>Audit Logs</name>
+        <order/>
+        <path/>
+        <path_relative_to_root>false</path_relative_to_root>
+        <roles>x_1939544_casefl_0.audit_logs_user</roles>
+        <sys_class_name>sys_ui_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-14 05:47:51</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>371a23e493d88710eb03f1ccebba10e5</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Audit Logs</sys_name>
+        <sys_package display_value="CaseFlow AI" source="x_1939544_casefl_0">55fe231893d40710eb03f1ccebba1081</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="CaseFlow AI">55fe231893d40710eb03f1ccebba1081</sys_scope>
+        <sys_update_name>sys_ui_module_371a23e493d88710eb03f1ccebba10e5</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-14 05:47:51</sys_updated_on>
+        <table>x_1939544_casefl_0_u_audit_logs</table>
+        <uncancelable>false</uncancelable>
+        <view_name/>
+    </sys_ui_module>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="CaseFlow AI">55fe231893d40710eb03f1ccebba1081</application>
+        <file_path/>
+        <instance_id>c0d8f04a3bf7d6109aefe747f4e45a84</instance_id>
+        <instance_name>dev296999</instance_name>
+        <name>sys_ui_module_371a23e493d88710eb03f1ccebba10e5</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_module"><sys_ui_module action="INSERT_OR_UPDATE"><active>true</active><application display_value="Audit Logs">bf1a23e493d88710eb03f1ccebba10df</application><filter/><name>Audit Logs</name><order/><path/><path_relative_to_root>false</path_relative_to_root><roles>x_1939544_casefl_0.audit_logs_user</roles><sys_class_name>sys_ui_module</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2026-04-14 05:47:51</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>371a23e493d88710eb03f1ccebba10e5</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Audit Logs</sys_name><sys_package display_value="CaseFlow AI" source="x_1939544_casefl_0">55fe231893d40710eb03f1ccebba1081</sys_package><sys_policy/><sys_scope display_value="CaseFlow AI">55fe231893d40710eb03f1ccebba1081</sys_scope><sys_update_name>sys_ui_module_371a23e493d88710eb03f1ccebba10e5</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2026-04-14 05:47:51</sys_updated_on><table>x_1939544_casefl_0_u_audit_logs</table><uncancelable>false</uncancelable><view_name/></sys_ui_module></record_update>]]></payload>
+        <payload_hash>2121839478</payload_hash>
+        <record_name>Audit Logs</record_name>
+        <reverted_from/>
+        <source>95fe231893d40710eb03f1ccebba108a</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-14 05:47:51</sys_created_on>
+        <sys_id>f31a23e493d88710eb03f1ccebba10e9</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>19d8a8825730000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-14 05:47:51</sys_updated_on>
+        <type>Module</type>
+        <update_guid>b31a23e4edd887107b143ef9edb44de8</update_guid>
+        <update_guid_history>b31a23e4edd887107b143ef9edb44de8:2121839478</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 04:05:58</sys_created_on>
+        <sys_db_object display_value="" name="sys_ui_module">sys_ui_module</sys_db_object>
+        <sys_id>411ac119906742199ce1685a6fd38e91</sys_id>
+        <sys_metadata>371a23e493d88710eb03f1ccebba10e5</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Audit Logs</sys_name>
+        <sys_package display_value="CaseFlow AI" source="x_1939544_casefl_0">55fe231893d40710eb03f1ccebba1081</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="CaseFlow AI">55fe231893d40710eb03f1ccebba1081</sys_scope>
+        <sys_scope_delete display_value="">101d6dfa431b41389f20b45b2bc32b31</sys_scope_delete>
+        <sys_update_name>sys_ui_module_371a23e493d88710eb03f1ccebba10e5</sys_update_name>
+        <sys_update_version display_value="sys_ui_module_371a23e493d88710eb03f1ccebba10e5">f31a23e493d88710eb03f1ccebba10e9</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 04:05:58</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

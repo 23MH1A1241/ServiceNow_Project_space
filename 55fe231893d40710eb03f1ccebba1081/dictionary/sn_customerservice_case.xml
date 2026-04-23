@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element attributes="email_client=true" audit="true" db_object_id="eea1a7ec93148710eb03f1ccebba101e" extends="task" label="Case" max_length="40" name="sn_customerservice_case" text_index="true" type="collection">
+        <element attributes="edge_encryption_enabled=true" choice="1" label="u_urgency" max_length="40" name="x_1939544_casefl_0_u_urgency" type="string">
+            <choice/>
+        </element>
+    </element>
+</database>

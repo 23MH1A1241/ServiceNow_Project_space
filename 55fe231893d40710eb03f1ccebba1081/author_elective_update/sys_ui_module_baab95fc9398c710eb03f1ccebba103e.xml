@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_module">
+    <sys_ui_module action="DELETE">
+        <active>true</active>
+        <application display_value="Agent profiles">db3755749398c710eb03f1ccebba10e6</application>
+        <filter/>
+        <name>Agent profiles</name>
+        <order/>
+        <path/>
+        <path_relative_to_root>false</path_relative_to_root>
+        <roles>x_1939544_casefl_0.agent_profiles_user</roles>
+        <sys_class_name>sys_ui_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-14 14:03:56</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>baab95fc9398c710eb03f1ccebba103e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Agent profiles</sys_name>
+        <sys_package display_value="CaseFlow AI" source="x_1939544_casefl_0">55fe231893d40710eb03f1ccebba1081</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="CaseFlow AI">55fe231893d40710eb03f1ccebba1081</sys_scope>
+        <sys_update_name>sys_ui_module_baab95fc9398c710eb03f1ccebba103e</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-14 14:03:56</sys_updated_on>
+        <table>x_1939544_casefl_0_x_1939544_casefl_u_agent_profiles</table>
+        <uncancelable>false</uncancelable>
+        <view_name/>
+    </sys_ui_module>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="CaseFlow AI">55fe231893d40710eb03f1ccebba1081</application>
+        <file_path/>
+        <instance_id>c0d8f04a3bf7d6109aefe747f4e45a84</instance_id>
+        <instance_name>dev296999</instance_name>
+        <name>sys_ui_module_baab95fc9398c710eb03f1ccebba103e</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_module"><sys_ui_module action="INSERT_OR_UPDATE"><active>true</active><application display_value="Agent profiles">db3755749398c710eb03f1ccebba10e6</application><filter/><name>Agent profiles</name><order/><path/><path_relative_to_root>false</path_relative_to_root><roles>x_1939544_casefl_0.agent_profiles_user</roles><sys_class_name>sys_ui_module</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2026-04-14 14:03:56</sys_created_on><sys_domain>global</sys_domain><sys_domain_path>/</sys_domain_path><sys_id>baab95fc9398c710eb03f1ccebba103e</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Agent profiles</sys_name><sys_package display_value="CaseFlow AI" source="x_1939544_casefl_0">55fe231893d40710eb03f1ccebba1081</sys_package><sys_policy/><sys_scope display_value="CaseFlow AI">55fe231893d40710eb03f1ccebba1081</sys_scope><sys_update_name>sys_ui_module_baab95fc9398c710eb03f1ccebba103e</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2026-04-14 14:03:56</sys_updated_on><table>x_1939544_casefl_0_x_1939544_casefl_u_agent_profiles</table><uncancelable>false</uncancelable><view_name/></sys_ui_module></record_update>]]></payload>
+        <payload_hash>-1099336039</payload_hash>
+        <record_name>Agent profiles</record_name>
+        <reverted_from/>
+        <source>95fe231893d40710eb03f1ccebba108a</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-14 14:03:56</sys_created_on>
+        <sys_id>3eab95fc9398c710eb03f1ccebba1041</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>19d8c4e536b0000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-14 14:03:56</sys_updated_on>
+        <type>Module</type>
+        <update_guid>faab95fc1098c710c0abc171a6e43540</update_guid>
+        <update_guid_history>faab95fc1098c710c0abc171a6e43540:-1099336039</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-14 14:04:31</sys_created_on>
+        <sys_db_object display_value="" name="sys_ui_module">sys_ui_module</sys_db_object>
+        <sys_id>9b5affe3b68c42f38f7fc75438d7f3e9</sys_id>
+        <sys_metadata>baab95fc9398c710eb03f1ccebba103e</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Agent profiles</sys_name>
+        <sys_package display_value="CaseFlow AI" source="x_1939544_casefl_0">55fe231893d40710eb03f1ccebba1081</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="CaseFlow AI">55fe231893d40710eb03f1ccebba1081</sys_scope>
+        <sys_scope_delete display_value="">101d6dfa431b41389f20b45b2bc32b31</sys_scope_delete>
+        <sys_update_name>sys_ui_module_baab95fc9398c710eb03f1ccebba103e</sys_update_name>
+        <sys_update_version display_value="sys_ui_module_baab95fc9398c710eb03f1ccebba103e">3eab95fc9398c710eb03f1ccebba1041</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-14 14:04:31</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

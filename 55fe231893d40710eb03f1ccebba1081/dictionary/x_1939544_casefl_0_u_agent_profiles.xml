@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="13b12d7c93d8c710eb03f1ccebba1050" label="Agent profiles" max_length="40" name="x_1939544_casefl_0_u_agent_profiles" type="collection">
+        <element label="Workload" max_length="40" name="workload" type="integer"/>
+        <element label="Availability" max_length="40" name="availability" type="boolean"/>
+        <element choice="1" label="Skill" max_length="40" name="u_skill" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Laptop" sequence="300" value="Laptop"/>
+                <element inactive_on_update="false" label="TV" sequence="200" value="TV"/>
+                <element inactive_on_update="false" label="Mobile" sequence="100" value="Mobile"/>
+            </choice>
+        </element>
+        <element label="Max Workload" max_length="40" name="max_workload" type="integer"/>
+        <element label="Name" max_length="40" name="u_name" type="string"/>
+        <element choice="1" label="Agent Teir" max_length="40" name="agent_teir" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Mid-Level" value="Mid-Level"/>
+                <element inactive_on_update="false" label="Junior" value="Junior"/>
+                <element inactive_on_update="false" label="Specialist" value="Specialist"/>
+                <element inactive_on_update="false" label="Senior" value="Senior"/>
+            </choice>
+        </element>
+    </element>
+</database>

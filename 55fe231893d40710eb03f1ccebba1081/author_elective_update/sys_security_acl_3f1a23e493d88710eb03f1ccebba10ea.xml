@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl">
+    <sys_security_acl action="DELETE">
+        <active>true</active>
+        <admin_overrides>true</admin_overrides>
+        <advanced>false</advanced>
+        <applies_to/>
+        <condition/>
+        <controlled_by_refs/>
+        <decision_type>allow</decision_type>
+        <description>Default access control on x_1939544_casefl_0_u_audit_logs</description>
+        <local_or_existing>Existing</local_or_existing>
+        <name>x_1939544_casefl_0_u_audit_logs</name>
+        <operation display_value="create">create</operation>
+        <script/>
+        <security_attribute/>
+        <sys_class_name>sys_security_acl</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-14 05:47:51</sys_created_on>
+        <sys_id>3f1a23e493d88710eb03f1ccebba10ea</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_1939544_casefl_0_u_audit_logs</sys_name>
+        <sys_package display_value="CaseFlow AI" source="x_1939544_casefl_0">55fe231893d40710eb03f1ccebba1081</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="CaseFlow AI">55fe231893d40710eb03f1ccebba1081</sys_scope>
+        <sys_update_name>sys_security_acl_3f1a23e493d88710eb03f1ccebba10ea</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-14 05:47:51</sys_updated_on>
+        <type display_value="record">record</type>
+    </sys_security_acl>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="CaseFlow AI">55fe231893d40710eb03f1ccebba1081</application>
+        <file_path/>
+        <instance_id>c0d8f04a3bf7d6109aefe747f4e45a84</instance_id>
+        <instance_name>dev296999</instance_name>
+        <name>sys_security_acl_3f1a23e493d88710eb03f1ccebba10ea</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl"><sys_security_acl action="INSERT_OR_UPDATE"><active>true</active><admin_overrides>true</admin_overrides><advanced>false</advanced><applies_to/><condition/><controlled_by_refs/><decision_type>allow</decision_type><description>Default access control on x_1939544_casefl_0_u_audit_logs</description><local_or_existing>Existing</local_or_existing><name>x_1939544_casefl_0_u_audit_logs</name><operation display_value="create">create</operation><script/><security_attribute/><sys_class_name>sys_security_acl</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2026-04-14 05:47:51</sys_created_on><sys_id>3f1a23e493d88710eb03f1ccebba10ea</sys_id><sys_mod_count>0</sys_mod_count><sys_name>x_1939544_casefl_0_u_audit_logs</sys_name><sys_package display_value="CaseFlow AI" source="x_1939544_casefl_0">55fe231893d40710eb03f1ccebba1081</sys_package><sys_policy/><sys_scope display_value="CaseFlow AI">55fe231893d40710eb03f1ccebba1081</sys_scope><sys_update_name>sys_security_acl_3f1a23e493d88710eb03f1ccebba10ea</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2026-04-14 05:47:51</sys_updated_on><type display_value="record">record</type></sys_security_acl></record_update>]]></payload>
+        <payload_hash>-459372901</payload_hash>
+        <record_name>x_1939544_casefl_0_u_audit_logs</record_name>
+        <reverted_from/>
+        <source>95fe231893d40710eb03f1ccebba108a</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-14 05:47:51</sys_created_on>
+        <sys_id>3f1a63e493d88710eb03f1ccebba1004</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>19d8a8825ec0000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-14 05:47:51</sys_updated_on>
+        <type>Access Control</type>
+        <update_guid>fb1a63e4dad88710519c5bf8e4439c03</update_guid>
+        <update_guid_history>fb1a63e4dad88710519c5bf8e4439c03:-459372901</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete/>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-15 04:05:56</sys_created_on>
+        <sys_db_object display_value="" name="sys_security_acl">sys_security_acl</sys_db_object>
+        <sys_id>3e482df33541456691c1d606114ec1a4</sys_id>
+        <sys_metadata>3f1a23e493d88710eb03f1ccebba10ea</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_1939544_casefl_0_u_audit_logs</sys_name>
+        <sys_package display_value="CaseFlow AI" source="x_1939544_casefl_0">55fe231893d40710eb03f1ccebba1081</sys_package>
+        <sys_parent display_value="">c42a63e493d88710eb03f1ccebba106b</sys_parent>
+        <sys_policy/>
+        <sys_scope display_value="CaseFlow AI">55fe231893d40710eb03f1ccebba1081</sys_scope>
+        <sys_scope_delete display_value="">101d6dfa431b41389f20b45b2bc32b31</sys_scope_delete>
+        <sys_update_name>sys_security_acl_3f1a23e493d88710eb03f1ccebba10ea</sys_update_name>
+        <sys_update_version display_value="sys_security_acl_3f1a23e493d88710eb03f1ccebba10ea">3f1a63e493d88710eb03f1ccebba1004</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-15 04:05:56</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>
