@@ -1,21 +1,21 @@
-# CaseFlow AI 🚀
+ # CaseFlow AI 
 
-## Intelligent Omnichannel Case Management System using ServiceNow Zurich
+# Intelligent Omnichannel Case Management System using ServiceNow Zurich
 
 CaseFlow AI is an advanced customer support automation system built on the ServiceNow Zurich platform. The project automates case categorization, intelligent agent assignment, SLA monitoring, escalation handling, and omnichannel support operations.
 
 This system improves customer support efficiency using AI-inspired automation, weighted assignment algorithms, proactive SLA management, and real-time dashboards.
 
-# 📌 Features
+#  Features
 
-## ✅ Omnichannel Case Creation
+##  Omnichannel Case Creation
 Supports case creation through:
 - Manual ServiceNow case creation
 - Email-to-Case
 - Virtual Agent (Chat)
 - WhatsApp simulation using inbound email
 
-## 🧠 AI-Based Categorization Engine
+##  AI-Based Categorization Engine
 Automatically detects:
 - Urgency → Critical / High / Medium / Low
 - Topic → Technical / Billing / Shipping / Returns
@@ -29,7 +29,7 @@ Automatically detects:
 
 Platinum customers automatically receive higher priority handling.
 
-## ⚙️ Intelligent Assignment Engine
+##  Intelligent Assignment Engine
 
 Cases are assigned automatically using a weighted scoring algorithm:
 
@@ -42,7 +42,7 @@ Cases are assigned automatically using a weighted scoring algorithm:
 
 The system prevents assigning overloaded agents and ensures balanced workload distribution.
 
-# ⏱️ SLA Management
+#  SLA Management
 
 Implemented 7 SLA combinations based on:
 - Customer Tier
@@ -56,7 +56,7 @@ Implemented 7 SLA combinations based on:
 | Gold | High | 1 hr | 8 hrs |
 | Standard | Any | 4 hrs | 48 hrs |
 
-# 🚨 Escalation Rules Engine
+#  Escalation Rules Engine
 
 Automated escalation rules include:
 - Critical cases unattended > 15 mins
@@ -69,7 +69,7 @@ Escalations are routed automatically to:
 - Senior Specialists
 - Supervisors
 
-# 📊 Dashboard & Reporting
+#  Dashboard & Reporting
 
 Real-time dashboards include:
 - Cases by Urgency
@@ -80,7 +80,7 @@ Real-time dashboards include:
 - Agent Workload Monitoring
 
 
-# 📝 Audit Logging
+#  Audit Logging
 
 Tracks all important system activities:
 - Categorization
@@ -91,7 +91,7 @@ Tracks all important system activities:
 
 Provides complete audit history for monitoring and debugging.
 
-# 🛠️ Technologies Used
+#  Technologies Used
 
 - ServiceNow Zurich
 - Flow Designer
@@ -102,7 +102,7 @@ Provides complete audit history for monitoring and debugging.
 - Notifications
 - Audit Logging
 
-# 📂 Project Modules
+#  Project Modules
 
 ## Day 1 — Foundation Setup
 - ServiceNow instance setup
@@ -133,7 +133,7 @@ Provides complete audit history for monitoring and debugging.
 - GitHub deployment
 - End-to-end validation
 
-# 🎯 Project Outcomes
+#  Project Outcomes
 
 ✔ Reduced manual case routing  
 ✔ Faster issue resolution  
@@ -142,7 +142,7 @@ Provides complete audit history for monitoring and debugging.
 ✔ Improved customer satisfaction  
 ✔ Real-time operational monitoring  
 
-# 👨‍💻 Team Contributions
+#  Team Contributions
 
 | Member | Contribution |
 |---|---|
@@ -153,7 +153,7 @@ Provides complete audit history for monitoring and debugging.
 | Raghu | Dashboard & Reports |
 | Vinay Kumar | Notifications, Logging & Testing |
 
-# 🔄 Demo Workflow
+#  Demo Workflow
 
 1. User creates case (Manual / Email / Chat / WhatsApp)
 2. Categorization engine detects urgency, topic, and product
@@ -163,7 +163,7 @@ Provides complete audit history for monitoring and debugging.
 6. Dashboard updates in real time
 7. Audit logs capture all actions
 
-# ✅ Final Highlights
+#  Final Highlights
 
 - AI-Based Categorization
 - Intelligent Assignment Engine
@@ -175,7 +175,7 @@ Provides complete audit history for monitoring and debugging.
 - ServiceNow Zurich Implementation
 
 
-# 🏁 Final Presentation Line
+#  Final Presentation Line
 
 > “CaseFlow AI is an intelligent omnichannel case management system built on ServiceNow Zurich that automates support operations through smart categorization, weighted agent assignment, proactive SLA management, and escalation handling to ensure optimal customer satisfaction.”
 
