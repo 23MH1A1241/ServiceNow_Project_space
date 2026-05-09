@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-samsung-light text-gray-900 antialiased overflow-hidden;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-xl border border-white/40 shadow-sm rounded-2xl transition-all duration-300;
+  }
+  
+  .glass-card {
+    @apply bg-white/60 backdrop-blur-md border border-white/30 shadow-sm rounded-xl p-6 hover:shadow-md hover:bg-white/80 transition-all duration-300;
+  }
+
+  .samsung-gradient {
+    @apply bg-gradient-to-r from-[#1428A0] to-[#0A1450] text-white;
+  }
+
+  .btn-primary {
+    @apply flex items-center justify-center space-x-2 py-3 px-6 rounded-xl font-medium text-white samsung-gradient hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all;
+  }
+
+  .input-field {
+    @apply block w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1428A0] focus:border-transparent transition-all bg-white/70;
+  }
+}
