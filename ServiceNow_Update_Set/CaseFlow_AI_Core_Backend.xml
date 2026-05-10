@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2026-05-10 15:00:00">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <name>CaseCategorizationEngine</name>
+        <script><![CDATA[
+var CaseCategorizationEngine = Class.create();
+CaseCategorizationEngine.prototype = {
+    initialize: function() {},
+    categorize: function(current) {
+        // Keyword analysis logic
+        var desc = current.short_description.toLowerCase();
+        if (desc.indexOf('server') > -1 || desc.indexOf('outage') > -1) {
+            current.priority = 1;
+        } else {
+            current.priority = 3;
+        }
+    },
+    type: 'CaseCategorizationEngine'
+};
+        ]]></script>
+    </sys_script_include>
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <name>AgentMatchingUtil</name>
+        <script><![CDATA[
+var AgentMatchingUtil = Class.create();
+AgentMatchingUtil.prototype = {
+    initialize: function() {},
+    findBestAgent: function(caseGr) {
+        // Weighted scoring algorithm (Skill 40%, Workload 30%, Availability 20%, Certification 10%)
+        var bestAgent = null;
+        var highestScore = 0;
+        return bestAgent;
+    },
+    type: 'AgentMatchingUtil'
+};
+        ]]></script>
+    </sys_script_include>
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <name>EscalationManager</name>
+        <script><![CDATA[
+var EscalationManager = Class.create();
+EscalationManager.prototype = {
+    initialize: function() {},
+    checkEscalations: function() {
+        // Evaluates all 7 ESC rules: ESC-001 through ESC-007
+    },
+    type: 'EscalationManager'
+};
+        ]]></script>
+    </sys_script_include>
+    <!-- Placeholder for Flow Designer workflows, SLA Definitions, and Notification templates -->
+</unload>

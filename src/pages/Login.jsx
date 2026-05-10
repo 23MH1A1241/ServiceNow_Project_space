@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { Hexagon, User, Lock, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -7,48 +7,48 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, loading, user } = useAuth();
   const navigate = useNavigate();
+
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
     try {
       await login(username, password);
       navigate('/');
     } catch (err) {
-      setError(err.message || 'Authentication failed. Please check your credentials.');
-    } finally {
-      setLoading(false);
+      setError(err.message || 'Authentication failed. Please check credentials.');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F4F7F6] to-blue-50 flex items-center justify-center p-4">
-      <div className="glass-panel w-full max-w-md p-10 relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-[#1428A0] rounded-full opacity-10 blur-2xl"></div>
-        <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-32 h-32 bg-blue-400 rounded-full opacity-10 blur-2xl"></div>
+    <div className="min-h-screen bg-samsung-light flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-samsung-blue rounded-full opacity-5 blur-[100px] animate-pulse-slow"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#0A1450] rounded-full opacity-5 blur-[120px]"></div>
 
-        <div className="text-center mb-10 relative z-10">
-          <div className="mx-auto samsung-gradient w-20 h-20 rounded-2xl flex items-center justify-center mb-6 shadow-xl shadow-blue-500/20">
+      <div className="glass-panel w-full max-w-md p-10 z-10 animate-slide-up">
+        <div className="text-center mb-10">
+          <div className="mx-auto samsung-gradient w-20 h-20 rounded-2xl flex items-center justify-center mb-6 shadow-xl shadow-blue-900/20">
             <Hexagon className="h-10 w-10 text-white" />
           </div>
           <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">CaseFlow AI</h1>
-          <p className="text-gray-500 mt-2 font-medium">Enterprise Service Automation</p>
+          <p className="text-gray-500 mt-2 font-medium">ServiceNow Enterprise Portal</p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm rounded-r-lg font-medium">
+          <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-700 text-sm rounded-xl font-medium shadow-sm animate-fade-in">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-6 relative z-10">
+        <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">ServiceNow Username</label>
+            <label className="label-text">ServiceNow Username</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <User className="h-5 w-5 text-gray-400" />
@@ -58,14 +58,14 @@ const Login = () => {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="input-field pl-11 py-3.5"
-                placeholder="e.g. agent1"
+                className="input-field pl-12"
+                placeholder="admin, vinay, agent1..."
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+            <label className="label-text">Password</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <Lock className="h-5 w-5 text-gray-400" />
@@ -75,7 +75,7 @@ const Login = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="input-field pl-11 py-3.5"
+                className="input-field pl-12"
                 placeholder="••••••••"
               />
             </div>
@@ -87,7 +87,7 @@ const Login = () => {
             className="w-full btn-primary py-4 mt-8"
           >
             {loading ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
+              <Loader2 className="h-6 w-6 animate-spin" />
             ) : (
               <>
                 <span className="text-lg">Secure Login</span>
@@ -96,6 +96,10 @@ const Login = () => {
             )}
           </button>
         </form>
+        
+        <div className="mt-8 text-center">
+            <p className="text-xs text-gray-400 font-medium">Powered by ServiceNow Zurich</p>
+        </div>
       </div>
     </div>
   );
