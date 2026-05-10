@@ -1,11 +1,13 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { Buffer } from 'node:buffer';
 
-const authHeader = 'Basic ' + Buffer.from('admin:CC3aYtxK$2l*').toString('base64');
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  const authHeader = 'Basic ' + Buffer.from(`${env.SN_USERNAME}:${env.SN_PASSWORD}`).toString('base64');
 
-export default defineConfig({
-  plugins: [react()],
+  return {
+    plugins: [react()],
   server: {
     port: 5173,
     proxy: {
@@ -51,5 +53,6 @@ export default defineConfig({
       '/sys_attachment.do': { target: 'https://dev296999.service-now.com', changeOrigin: true, secure: false },
       '/amb': { target: 'https://dev296999.service-now.com', changeOrigin: true, secure: false, ws: true }
     }
+  }
   }
 })

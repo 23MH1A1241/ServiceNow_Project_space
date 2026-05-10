@@ -16,12 +16,20 @@ const SupervisorDashboard = () => {
     fetchData();
   }, []);
 
-  // Mocking agent performance data based on total volume for the chart
-  const agentData = [
-    { name: 'Agent 1', cases: Math.floor(metrics.totalActive * 0.4) || 12 },
-    { name: 'Agent 2', cases: Math.floor(metrics.totalActive * 0.35) || 10 },
-    { name: 'Agent 3', cases: Math.floor(metrics.totalActive * 0.25) || 7 },
-  ];
+  // Compute agent performance data dynamically from all active cases
+  const agentCounts = (metrics.all || []).reduce((acc, curr) => {
+    if (curr.assigned_to) {
+      // Sometimes it's an object with display_value, sometimes just a sys_id string
+      const agentId = typeof curr.assigned_to === 'object' ? (curr.assigned_to.display_value || curr.assigned_to.value) : curr.assigned_to;
+      acc[agentId] = (acc[agentId] || 0) + 1;
+    }
+    return acc;
+  }, {});
+  
+  let agentData = Object.keys(agentCounts).map(name => ({ name, cases: agentCounts[name] }));
+  if (agentData.length === 0 && !loading && metrics.totalActive > 0) {
+    agentData = [{ name: 'Unassigned', cases: metrics.totalActive }];
+  }
 
   if (loading) return <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-samsung-blue mx-auto mt-20"></div>;
 
