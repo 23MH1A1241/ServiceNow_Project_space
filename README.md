@@ -1,22 +1,7 @@
 <<<<<<< HEAD
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# CaseFlow AI 🚀
+# CaseFlow AI 
 
 ## Intelligent Omnichannel Case Management System using ServiceNow Zurich
 
@@ -26,9 +11,9 @@ This system improves customer support efficiency using AI-inspired automation, w
 
 ---
 
-# 📌 Features
+#  Features
 
-## ✅ Omnichannel Case Creation
+##  Omnichannel Case Creation
 Supports case creation through:
 - Manual ServiceNow case creation
 - Email-to-Case
@@ -37,7 +22,7 @@ Supports case creation through:
 
 ---
 
-## 🧠 AI-Based Categorization Engine
+##  AI-Based Categorization Engine
 Automatically detects:
 - Urgency → Critical / High / Medium / Low
 - Topic → Technical / Billing / Shipping / Returns
@@ -53,7 +38,7 @@ Platinum customers automatically receive higher priority handling.
 
 ---
 
-## ⚙️ Intelligent Assignment Engine
+##  Intelligent Assignment Engine
 
 Cases are assigned automatically using a weighted scoring algorithm:
 
@@ -68,7 +53,7 @@ The system prevents assigning overloaded agents and ensures balanced workload di
 
 ---
 
-# ⏱️ SLA Management
+#  SLA Management
 
 Implemented 7 SLA combinations based on:
 - Customer Tier
@@ -84,7 +69,7 @@ Implemented 7 SLA combinations based on:
 
 ---
 
-# 🚨 Escalation Rules Engine
+#  Escalation Rules Engine
 
 Automated escalation rules include:
 - Critical cases unattended > 15 mins
@@ -99,7 +84,7 @@ Escalations are routed automatically to:
 
 ---
 
-# 📊 Dashboard & Reporting
+#  Dashboard & Reporting
 
 Real-time dashboards include:
 - Cases by Urgency
@@ -124,7 +109,7 @@ Provides complete audit history for monitoring and debugging.
 
 ---
 
-# 🛠️ Technologies Used
+#  Technologies Used
 
 - ServiceNow Zurich
 - Flow Designer
@@ -137,7 +122,7 @@ Provides complete audit history for monitoring and debugging.
 
 ---
 
-# 📂 Project Modules
+#  Project Modules
 
 ## Day 1 — Foundation Setup
 - ServiceNow instance setup
@@ -170,7 +155,7 @@ Provides complete audit history for monitoring and debugging.
 
 ---
 
-# 🎯 Project Outcomes
+#  Project Outcomes
 
 ✔ Reduced manual case routing  
 ✔ Faster issue resolution  
@@ -181,7 +166,7 @@ Provides complete audit history for monitoring and debugging.
 
 ---
 
-# 👨‍💻 Team Contributions
+#  Team Contributions
 
 | Member | Contribution |
 |---|---|
@@ -194,7 +179,7 @@ Provides complete audit history for monitoring and debugging.
 
 ---
 
-# 🔄 Demo Workflow
+#  Demo Workflow
 
 1. User creates case (Manual / Email / Chat / WhatsApp)
 2. Categorization engine detects urgency, topic, and product
@@ -206,7 +191,7 @@ Provides complete audit history for monitoring and debugging.
 
 ---
 
-# ✅ Final Highlights
+#  Final Highlights
 
 - AI-Based Categorization
 - Intelligent Assignment Engine
@@ -219,7 +204,7 @@ Provides complete audit history for monitoring and debugging.
 
 ---
 
-# 🏁 Final Presentation Line
+#  Final Presentation Line
 
 > “CaseFlow AI is an intelligent omnichannel case management system built on ServiceNow Zurich that automates support operations through smart categorization, weighted agent assignment, proactive SLA management, and escalation handling to ensure optimal customer satisfaction.”
 
