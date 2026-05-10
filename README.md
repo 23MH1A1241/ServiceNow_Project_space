@@ -1,227 +1,89 @@
-<<<<<<< HEAD
-# React + Vite
+# CaseFlow AI - Enterprise Support Portal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# CaseFlow AI 🚀
-
-## Intelligent Omnichannel Case Management System using ServiceNow Zurich
-
-CaseFlow AI is an advanced customer support automation system built on the ServiceNow Zurich platform. The project automates case categorization, intelligent agent assignment, SLA monitoring, escalation handling, and omnichannel support operations.
-
-This system improves customer support efficiency using AI-inspired automation, weighted assignment algorithms, proactive SLA management, and real-time dashboards.
+CaseFlow AI is a modern, high-performance, enterprise-grade customer support portal built with **React, Vite, and Tailwind CSS**. It acts as the frontend interface for a dedicated **ServiceNow Zurich scoped application**, providing a seamless, role-based experience for customers, agents, supervisors, and administrators.
 
 ---
 
-# 📌 Features
+## 🚀 Key Features
 
-## ✅ Omnichannel Case Creation
-Supports case creation through:
-- Manual ServiceNow case creation
-- Email-to-Case
-- Virtual Agent (Chat)
-- WhatsApp simulation using inbound email
-
----
-
-## 🧠 AI-Based Categorization Engine
-Automatically detects:
-- Urgency → Critical / High / Medium / Low
-- Topic → Technical / Billing / Shipping / Returns
-- Product → Mobile / TV / Laptop
-
-### Example:
-| Description | Result |
-|---|---|
-| "My mobile is not working" | Critical + Technical + Mobile |
-| "Billing payment issue" | High + Billing |
-
-Platinum customers automatically receive higher priority handling.
+*   **ServiceNow REST API Integration**: Directly interfaces with the ServiceNow backend (dev296999 instance) via securely proxied REST API endpoints.
+*   **Dynamic Role-Based Dashboards**: Intelligent UI rendering based on user role (Authentication simulated via `sys_user` concepts):
+    *   **Customer Dashboard**: View personal open cases, recent activity, and SLA tracking timelines.
+    *   **Agent Dashboard**: Workload distribution pie charts, SLA warnings, and assigned case management.
+    *   **Supervisor Dashboard**: Team queue overviews, agent performance comparison charts, and critical escalation alerts.
+    *   **Admin Dashboard**: Global system analytics, case ingestion volume area charts, and priority distribution metrics.
+*   **Native AI Virtual Agent**: A conversational React chatbot that guides users through the "Report An Issue" flow, capturing product categories, descriptions, and urgencies before automatically invoking the ServiceNow API to generate a Case.
+*   **Live Case Tracking**: Real-time status updates and animated SLA progression indicators.
+*   **Enterprise UI/UX**: Designed using "Samsung-inspired" enterprise aesthetics featuring glassmorphism, responsive data tables, Recharts visualizations, and Lucide-react iconography.
 
 ---
 
-## ⚙️ Intelligent Assignment Engine
+## 🏗️ Architecture Stack
 
-Cases are assigned automatically using a weighted scoring algorithm:
-
-| Factor | Weight |
-|---|---|
-| Skill Match | 40% |
-| Workload Capacity | 30% |
-| Availability | 20% |
-| Certification Priority | 10% |
-
-The system prevents assigning overloaded agents and ensures balanced workload distribution.
+*   **Framework**: React 18 + Vite (for lightning-fast HMR and optimized builds)
+*   **Styling**: Tailwind CSS v3 (Custom Enterprise Configuration)
+*   **Data Visualization**: Recharts (Dynamic Dashboarding)
+*   **Icons**: Lucide React
+*   **Routing**: React Router DOM (Role-protected routes)
+*   **Backend Interop**: Axios + Vite Dev Server Proxy (Resolving ServiceNow CORS & Authentication)
 
 ---
 
-# ⏱️ SLA Management
+## ⚙️ Local Development Setup
 
-Implemented 7 SLA combinations based on:
-- Customer Tier
-- Case Urgency
+To run this project locally, ensure you have **Node.js** installed.
 
-### SLA Examples
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
 
-| Customer Tier | Urgency | Response Time | Resolution Time |
-|---|---|---|---|
-| Platinum | Critical | 15 min | 2 hrs |
-| Gold | High | 1 hr | 8 hrs |
-| Standard | Any | 4 hrs | 48 hrs |
+2. **Run the Development Server**:
+   ```bash
+   npm run dev
+   ```
 
----
-
-# 🚨 Escalation Rules Engine
-
-Automated escalation rules include:
-- Critical cases unattended > 15 mins
-- High-priority cases unattended > 30 mins
-- Platinum customer priority escalation
-- SLA breach escalation
-
-Escalations are routed automatically to:
-- Escalation Team
-- Senior Specialists
-- Supervisors
+3. **View the Portal**:
+   Open your browser and navigate to `http://localhost:5173` (or the port specified in your terminal).
 
 ---
 
-# 📊 Dashboard & Reporting
+## 🔐 ServiceNow Connection Details
 
-Real-time dashboards include:
-- Cases by Urgency
-- Cases by Assignment Group
-- Cases by Channel
-- SLA Compliance
-- Escalated Cases
-- Agent Workload Monitoring
+The portal communicates with the ServiceNow instance using a secure proxy configured in `vite.config.js`. 
 
----
+*   **Target Instance**: `https://dev296999.service-now.com`
+*   **Primary Data Table**: `sn_customerservice_case`
+*   **Proxy Setup**: All requests to `/api/now/...` are intercepted by Vite, injected with the required Basic Authentication headers, and forwarded to ServiceNow to bypass CORS restrictions during local development.
 
-# 📝 Audit Logging
-
-Tracks all important system activities:
-- Categorization
-- Assignment
-- Escalation
-- Channel information
-- SLA events
-
-Provides complete audit history for monitoring and debugging.
+> **Note for Production Deployment**: When moving this application to production, the `vite.config.js` proxy will not be active. Ensure your production web server (Nginx, Node, etc.) handles the proxying or that proper OAuth / CORS policies are configured on the ServiceNow instance.
 
 ---
 
-# 🛠️ Technologies Used
+## 👥 Authentication Testing
 
-- ServiceNow Zurich
-- Flow Designer
-- Business Rules
-- Script Includes
-- Virtual Agent
-- SLA Definitions
-- Notifications
-- Audit Logging
+For demonstration and development purposes, you can use the quick login buttons on the portal's login screen to instantly simulate different user roles without requiring strict OAuth handshakes:
+
+*   **Customer** (Simulates a standard user creating and tracking their own cases)
+*   **Agent** (Simulates an ITIL user managing assigned queues)
+*   **Supervisor** (Simulates a team lead monitoring escalations)
+*   **Admin** (Simulates a system administrator with global data visibility)
 
 ---
 
-# 📂 Project Modules
+## 📁 Repository Structure
 
-## Day 1 — Foundation Setup
-- ServiceNow instance setup
-- Application creation
-- User roles & assignment groups
-- Email-to-Case integration
-- Agent & audit tables
-
-## Day 2 — Categorization Engine
-- AI-based urgency/topic/product detection
-- Customer tier override logic
-- Audit logging
-
-## Day 3 — Assignment Engine
-- Weighted assignment algorithm
-- Workload balancing
-- Chat & WhatsApp integration
-
-## Day 4 — SLA & Escalation
-- SLA definitions
-- Escalation rules
-- Notifications
-- SLA monitoring
-
-## Day 5 — Final Testing & Dashboard
-- Full system testing
-- Dashboard implementation
-- GitHub deployment
-- End-to-end validation
+```text
+/src
+ ├── /api               # ServiceNow API integration logic (serviceNow.js)
+ ├── /components        # Reusable UI components (Layout, Dashboards, etc.)
+ ├── /context           # React Context for global state (AuthContext.jsx)
+ ├── /pages             # Top-level route components (Home, Chatbot, TrackCase)
+ ├── App.jsx            # Application root and route definitions
+ ├── index.css          # Global Tailwind and Glassmorphism utilities
+ └── main.jsx           # React Entry point
+```
 
 ---
 
-# 🎯 Project Outcomes
-
-✔ Reduced manual case routing  
-✔ Faster issue resolution  
-✔ Better SLA compliance  
-✔ Intelligent workload balancing  
-✔ Improved customer satisfaction  
-✔ Real-time operational monitoring  
-
----
-
-# 👨‍💻 Team Contributions
-
-| Member | Contribution |
-|---|---|
-| Sai Teja | Architecture, SLA & Escalation Engine |
-| Varshitha | Categorization Engine & Flow Designer |
-| Divya | Virtual Agent & WhatsApp Integration |
-| Asritha | Weighted Assignment Engine |
-| Raghu | Dashboard & Reports |
-| Vinay Kumar | Notifications, Logging & Testing |
-
----
-
-# 🔄 Demo Workflow
-
-1. User creates case (Manual / Email / Chat / WhatsApp)
-2. Categorization engine detects urgency, topic, and product
-3. Assignment engine assigns best available agent
-4. SLA automatically attaches
-5. Escalation rules trigger if necessary
-6. Dashboard updates in real time
-7. Audit logs capture all actions
-
----
-
-# ✅ Final Highlights
-
-- AI-Based Categorization
-- Intelligent Assignment Engine
-- Omnichannel Support
-- SLA Automation
-- Escalation Management
-- Real-Time Dashboards
-- Audit Logging
-- ServiceNow Zurich Implementation
-
----
-
-# 🏁 Final Presentation Line
-
-> “CaseFlow AI is an intelligent omnichannel case management system built on ServiceNow Zurich that automates support operations through smart categorization, weighted agent assignment, proactive SLA management, and escalation handling to ensure optimal customer satisfaction.”
-
----
->>>>>>> 58fb7f0b4990e13040d544ec63f036b77897bb32
+*Designed and integrated for the CaseFlow AI ServiceNow Scoped Application.*
