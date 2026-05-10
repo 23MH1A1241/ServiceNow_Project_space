@@ -1,83 +1,203 @@
 import axios from 'axios';
 
 // Create a generic axios instance that uses the Vite proxy
+// The auth header and base URL are handled by vite.config.js
 const client = axios.create({
-  baseURL: '', // Handled by Vite proxy
+  baseURL: '', 
 });
 
-// ServiceNow Tables
-const CASE_TABLE = 'sn_customerservice_case'; // User specifically requested this table despite earlier errors. Let's assume it exists on dev296999!
+const CASE_TABLE = 'sn_customerservice_case';
+const USER_TABLE = 'sys_user';
+const KB_TABLE = 'kb_knowledge';
 
+/**
+ * Authenticates a user against the ServiceNow sys_user table.
+ * Fallback to mock users if not found for development purposes.
+ */
 export const authenticateUser = async (username, password) => {
-  if (username !== 'admin' && username !== password) {
-    throw new Error('Invalid credentials (testing constraint: password must equal username)');
-  }
-
-  // Verify against sys_user
-  const res = await client.get(`/api/now/table/sys_user?sysparm_query=user_name=${username}&sysparm_limit=1`);
-  const users = res.data.result;
-
-  if (!users || users.length === 0) {
-    throw new Error('User not found in ServiceNow sys_user table.');
-  }
-
-  const user = users[0];
+  let user = null;
   
-  // Dynamic role assignment based on username convention
-  let role = 'customer';
-  const uname = user.user_name.toLowerCase();
-  if (uname.includes('admin')) role = 'admin';
-  else if (uname.includes('supervisor')) role = 'supervisor';
-  else if (uname.includes('agent')) role = 'agent';
+  try {
+    const res = await client.get(`/api/now/table/${USER_TABLE}?sysparm_query=user_name=${username}&sysparm_limit=1`);
+    if (res.data && res.data.result && res.data.result.length > 0) {
+      user = res.data.result[0];
+    }
+  } catch (error) {
+    console.error('ServiceNow verify failed', error);
+  }
 
-  return {
-    sys_id: user.sys_id,
-    user_name: user.user_name,
-    name: user.name,
-    email: user.email,
-    role: role
+  // Handle case where user is found in ServiceNow
+  if (user) {
+    let role = 'customer';
+    const uname = user.user_name.toLowerCase();
+    // Dynamic role assignment based on username convention
+    if (uname.includes('admin')) role = 'admin';
+    else if (uname.includes('supervisor')) role = 'supervisor';
+    else if (uname.includes('agent')) role = 'agent';
+
+    return {
+      sys_id: user.sys_id,
+      user_name: user.user_name,
+      name: user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.user_name,
+      email: user.email || '',
+      role: role
+    };
+  }
+
+  // Fallback check for missing dev users
+  const devUsers = {
+    'admin': { name: 'System Administrator', email: 'admin@example.com', role: 'admin' },
+    'vinay': { name: 'Vinay User', email: 'vinay@example.com', role: 'customer' },
+    'agent1': { name: 'Support Agent 1', email: 'agent1@example.com', role: 'agent' },
+    'supervisor1': { name: 'Support Supervisor 1', email: 'supervisor1@example.com', role: 'supervisor' }
   };
+
+  if (devUsers[username] && password === username) {
+     return { sys_id: 'dev_' + username, user_name: username, ...devUsers[username] };
+  }
+
+  throw new Error('Authentication failed. User not found in system.');
 };
 
+/**
+ * Creates a new case in ServiceNow
+ */
 export const createCase = async (caseData) => {
-  const response = await client.post(`/api/now/table/${CASE_TABLE}`, caseData);
-  return response.data.result;
+  try {
+    const response = await client.post(`/api/now/table/${CASE_TABLE}`, caseData);
+    return response.data.result;
+  } catch (error) {
+    console.error('Error creating case:', error);
+    throw new Error('Failed to create case. Please try again.');
+  }
 };
 
+/**
+ * Retrieves a specific case by its number
+ */
 export const getCase = async (caseNumber) => {
-  const response = await client.get(`/api/now/table/${CASE_TABLE}?sysparm_query=number=${caseNumber}`);
-  if (response.data.result && response.data.result.length > 0) {
-    return response.data.result[0];
+  try {
+    const response = await client.get(`/api/now/table/${CASE_TABLE}?sysparm_query=number=${caseNumber}`);
+    if (response.data.result && response.data.result.length > 0) {
+      return response.data.result[0];
+    }
+    return null;
+  } catch (error) {
+    console.error('Error fetching case:', error);
+    throw new Error('Failed to fetch case data.');
   }
-  return null;
 };
 
-// Generic function to get metrics based on query
-export const getDashboardMetrics = async (role, username) => {
-  let query = '';
-  // Custom query logic based on role
-  if (role === 'agent') {
-    // Ideally query assigned_to
-    query = 'ORDERBYDESCsys_created_on';
-  } else if (role === 'supervisor') {
-    query = 'ORDERBYDESCsys_created_on';
+/**
+ * Customer Dashboard Data - Queries cases where the caller is the user
+ */
+export const fetchCustomerMetrics = async (sys_id) => {
+  try {
+    const response = await client.get(`/api/now/table/${CASE_TABLE}?sysparm_query=contact=${sys_id}^ORcaller=${sys_id}^ORDERBYDESCsys_created_on&sysparm_limit=50`);
+    const cases = response.data.result || [];
+    
+    return {
+      open: cases.filter(c => c.state === '1' || c.state === '2').length,
+      resolved: cases.filter(c => c.state === '3' || c.state === '7').length,
+      escalated: cases.filter(c => c.escalation === '1' || c.escalation === '2').length,
+      recent: cases.slice(0, 5)
+    };
+  } catch (error) {
+    console.error('Error fetching customer metrics:', error);
+    return { open: 0, resolved: 0, escalated: 0, recent: [] };
   }
-
-  const response = await client.get(`/api/now/table/${CASE_TABLE}?sysparm_limit=100&sysparm_query=${query}`);
-  const cases = response.data.result || [];
-  
-  const active = cases.filter(c => c.state !== '3' && c.state !== '4' && c.state !== '7').length;
-  const critical = cases.filter(c => c.priority === '1').length;
-  const resolved = cases.filter(c => c.state === '3').length;
-  const escalated = cases.filter(c => c.escalation === '1').length;
-
-  return { active, critical, resolved, escalated, recent: cases.slice(0, 8) };
 };
 
+/**
+ * Agent Dashboard Data - Queries cases assigned to the specific agent
+ */
+export const fetchAgentMetrics = async (user_name, sys_id) => {
+  try {
+    // Attempt to query by sys_id (assigned_to usually stores sys_id)
+    const response = await client.get(`/api/now/table/${CASE_TABLE}?sysparm_query=assigned_to=${sys_id}^ORDERBYDESCsys_created_on&sysparm_limit=100`);
+    const cases = response.data.result || [];
+    
+    return {
+      assigned: cases.length,
+      critical: cases.filter(c => c.priority === '1' || c.priority === '2').length,
+      resolved: cases.filter(c => c.state === '3' || c.state === '7').length,
+      escalated: cases.filter(c => c.escalation === '1' || c.escalation === '2').length,
+      recent: cases.slice(0, 10)
+    };
+  } catch (error) {
+    console.error('Error fetching agent metrics:', error);
+    return { assigned: 0, critical: 0, resolved: 0, escalated: 0, recent: [] };
+  }
+};
+
+/**
+ * Supervisor Dashboard Data - Queries all active cases to monitor team health
+ */
+export const fetchSupervisorMetrics = async () => {
+  try {
+    // Supervisors monitor team queues, escalations, and active work
+    const response = await client.get(`/api/now/table/${CASE_TABLE}?sysparm_query=active=true^ORDERBYDESCsys_created_on&sysparm_limit=200`);
+    const cases = response.data.result || [];
+    
+    return {
+      totalActive: cases.length,
+      escalated: cases.filter(c => c.escalation === '1' || c.escalation === '2').length,
+      unassigned: cases.filter(c => !c.assigned_to).length,
+      criticalAlerts: cases.filter(c => c.priority === '1').length,
+      recent: cases.slice(0, 15),
+      all: cases
+    };
+  } catch (error) {
+    console.error('Error fetching supervisor metrics:', error);
+    return { totalActive: 0, escalated: 0, unassigned: 0, criticalAlerts: 0, recent: [], all: [] };
+  }
+};
+
+/**
+ * Admin Dashboard Data - Complete system aggregation
+ */
+export const fetchAdminMetrics = async () => {
+  try {
+    const response = await client.get(`/api/now/table/${CASE_TABLE}?sysparm_query=ORDERBYDESCsys_created_on&sysparm_limit=500`);
+    const cases = response.data.result || [];
+    
+    return {
+      total: cases.length,
+      open: cases.filter(c => c.state === '1' || c.state === '2').length,
+      resolved: cases.filter(c => c.state === '3' || c.state === '7').length,
+      escalated: cases.filter(c => c.escalation === '1' || c.escalation === '2').length,
+      priorityDistribution: {
+        p1: cases.filter(c => c.priority === '1').length,
+        p2: cases.filter(c => c.priority === '2').length,
+        p3: cases.filter(c => c.priority === '3').length,
+        p4: cases.filter(c => c.priority === '4').length,
+      },
+      all: cases
+    };
+  } catch (error) {
+    console.error('Error fetching admin metrics:', error);
+    return { total: 0, open: 0, resolved: 0, escalated: 0, priorityDistribution: {p1:0, p2:0, p3:0, p4:0}, all: [] };
+  }
+};
+
+/**
+ * Retrieves Knowledge Base articles
+ */
 export const getKnowledgeArticles = async () => {
-    return [
-        { sys_id: '1', short_description: 'How to reset your password', text: 'Follow these steps to securely reset your credentials.' },
-        { sys_id: '2', short_description: 'Network connectivity issues', text: 'Check your router and local proxy settings.' },
-        { sys_id: '3', short_description: 'Mobile Device Not Turning On', text: 'Hold the power button for 10 seconds to hard reset.' }
-    ];
+  try {
+    const response = await client.get(`/api/now/table/${KB_TABLE}?sysparm_limit=10&sysparm_query=workflow_state=published`);
+    if (response.data && response.data.result && response.data.result.length > 0) {
+      return response.data.result;
+    }
+  } catch (error) {
+    console.warn('Could not fetch KB from SN, using mock data', error);
+  }
+  
+  // Mock fallback if KB is not accessible
+  return [
+    { sys_id: 'kb1', short_description: 'How to reset your corporate password', text: 'Navigate to the IT portal and click "Forgot Password". Follow the MFA prompts.' },
+    { sys_id: 'kb2', short_description: 'Troubleshooting VPN Connectivity', text: 'Ensure you are connected to a stable network. Open the Cisco AnyConnect client and reconnect.' },
+    { sys_id: 'kb3', short_description: 'Requesting Hardware Replacements', text: 'Submit a request via the hardware catalog. Approvals from your manager are required.' },
+    { sys_id: 'kb4', short_description: 'Setting up Email on Mobile Devices', text: 'Download the Outlook app. Enter your corporate email and authenticate via Okta.' }
+  ];
 };

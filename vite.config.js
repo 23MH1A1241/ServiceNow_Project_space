@@ -1,31 +1,55 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { Buffer } from 'node:buffer';
 
-// Use the admin credentials to securely proxy all API requests to ServiceNow
-// This completely hides the admin credentials from the frontend browser
 const authHeader = 'Basic ' + Buffer.from('admin:CC3aYtxK$2l*').toString('base64');
 
 export default defineConfig({
   plugins: [react()],
   server: {
+    port: 5173,
     proxy: {
       '/api/now': {
         target: 'https://dev296999.service-now.com',
         changeOrigin: true,
         secure: false,
-        configure: (proxy, options) => {
-          proxy.on('proxyReq', (proxyReq, req, res) => {
-            // Inject ServiceNow credentials on the server side
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
             proxyReq.setHeader('Authorization', authHeader);
             proxyReq.setHeader('Content-Type', 'application/json');
             proxyReq.setHeader('Accept', 'application/json');
           });
-          proxy.on('proxyRes', (proxyRes, req, res) => {
-            // Prevent native browser authentication popups
+          proxy.on('proxyRes', (proxyRes) => {
             delete proxyRes.headers['www-authenticate'];
           });
         }
-      }
+      },
+      '/$sn-va-web-client-app.do': {
+        target: 'https://dev296999.service-now.com',
+        changeOrigin: true,
+        secure: false,
+        configure: (proxy) => {
+          proxy.on('proxyRes', (proxyRes) => {
+            delete proxyRes.headers['x-frame-options'];
+            delete proxyRes.headers['content-security-policy'];
+          });
+        }
+      },
+      '/api/sn_va_web_client': {
+        target: 'https://dev296999.service-now.com',
+        changeOrigin: true,
+        secure: false,
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+             // For the VA client API, we also need auth if we want it to work without the user logging into SN separately
+             proxyReq.setHeader('Authorization', authHeader);
+          });
+        }
+      },
+      '/styles': { target: 'https://dev296999.service-now.com', changeOrigin: true, secure: false },
+      '/scripts': { target: 'https://dev296999.service-now.com', changeOrigin: true, secure: false },
+      '/sys_attachment.do': { target: 'https://dev296999.service-now.com', changeOrigin: true, secure: false },
+      '/amb': { target: 'https://dev296999.service-now.com', changeOrigin: true, secure: false, ws: true }
     }
   }
 })
