@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, Send, User, Sparkles, MessageSquare, Loader2, Zap } from 'lucide-react';
+import { Bot, Send, User, Sparkles, MessageSquare, Loader2, Zap, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { processChatIntent } from '../api/serviceNow';
+import { processChatIntent, createCase } from '../api/serviceNow';
 import { getAIResolution } from '../api/gemini';
 
 const Chatbot = () => {
@@ -11,6 +11,7 @@ const Chatbot = () => {
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isCreatingCase, setIsCreatingCase] = useState(false);
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -36,12 +37,34 @@ const Chatbot = () => {
       setMessages(prev => [...prev, { 
         role: 'bot', 
         content: aiResolution, 
-        data: intentResponse.data 
+        data: intentResponse.data,
+        canEscalate: true
       }]);
     } catch (err) {
       setMessages(prev => [...prev, { role: 'bot', content: "Interface error. Connection to Neural Engine lost." }]);
     } finally {
       setIsTyping(false);
+    }
+  };
+
+  const handleRaiseCase = async (query) => {
+    setIsCreatingCase(true);
+    try {
+      const newCase = await createCase({
+        short_description: `Escalated from AI Chat: ${query.slice(0, 50)}...`,
+        description: `User reported that the AI resolution for "${query}" did not work. Escalate to human agent.`,
+        priority: '2',
+        caller_id: user?.sys_id
+      });
+      setMessages(prev => [...prev, { 
+        role: 'bot', 
+        content: `Neural escalation complete. Case ${newCase.number} has been provisioned. A human agent will review your query shortly.`,
+        data: { case_number: newCase.number }
+      }]);
+    } catch (err) {
+      setMessages(prev => [...prev, { role: 'bot', content: "Escalation failed. Please use the manual 'Create Case' page." }]);
+    } finally {
+      setIsCreatingCase(false);
     }
   };
 
@@ -77,6 +100,17 @@ const Chatbot = () => {
                    }`}>
                      {m.content}
                    </div>
+                   {m.canEscalate && !isCreatingCase && (
+                      <div className="flex items-center space-x-3 mt-4 animate-fade-in">
+                         <button 
+                           onClick={() => handleRaiseCase(messages[i-1]?.content || m.content)}
+                           className="px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-xl text-[9px] font-black text-red-500 uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center space-x-2"
+                         >
+                            <AlertCircle className="w-3 h-3" />
+                            <span>This didn't work. Raise Case.</span>
+                         </button>
+                      </div>
+                   )}
                    {m.data && (
                       <div className="p-4 bg-[#020617] text-white rounded-2xl border border-white/5 shadow-2xl animate-fade-in">
                          <div className="flex items-center space-x-2 mb-3">
