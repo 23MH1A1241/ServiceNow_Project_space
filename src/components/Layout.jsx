@@ -36,18 +36,21 @@ const Layout = () => {
   };
 
   return (
-    <div className="flex h-screen bg-samsung-light overflow-hidden font-sans">
+    <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-outfit selection:bg-blue-500/30">
       {/* Sidebar */}
-      <aside className="w-72 glass-panel m-4 flex flex-col justify-between z-20">
+      <aside className="w-72 bg-[#020617] m-4 rounded-[2rem] flex flex-col justify-between z-20 shadow-2xl shadow-blue-900/10 border border-white/5 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full bg-blue-500/5 blur-3xl pointer-events-none"></div>
         <div className="overflow-y-auto overflow-x-hidden">
-          <div className="p-8 flex flex-col items-center border-b border-gray-100/50">
-            <div className="samsung-gradient w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-900/20 mb-4 animate-slide-up">
-              <Hexagon className="h-8 w-8 text-white" />
+          <div className="p-10 flex flex-col items-center border-b border-white/5">
+            <div className="bg-white/5 w-16 h-16 rounded-2xl flex items-center justify-center border border-white/10 shadow-2xl mb-4 group transition-all">
+              <Hexagon className="h-9 w-9 text-blue-400 group-hover:scale-110 transition-transform" />
             </div>
-            <span className="text-2xl font-extrabold text-gray-900 tracking-tight">CaseFlow AI</span>
-            <span className="text-xs font-bold text-samsung-blue uppercase tracking-widest mt-2 bg-blue-50 px-3 py-1 rounded-full shadow-sm">
-              {user?.role} Portal
-            </span>
+            <span className="text-2xl font-black text-white tracking-tighter">CaseFlow</span>
+            <div className="mt-4 px-4 py-1 bg-blue-500/10 rounded-full border border-blue-500/20">
+              <span className="text-[8px] font-black text-blue-400 uppercase tracking-[0.2em]">
+                {user?.role} Identity
+              </span>
+            </div>
           </div>
           <nav className="p-5 space-y-2">
             {getNavItems().map((item) => {
@@ -57,7 +60,11 @@ const Layout = () => {
                   key={item.name}
                   to={item.path}
                   className={({ isActive }) =>
-                    `nav-item ${isActive ? 'nav-item-active' : 'nav-item-inactive'}`
+                    `flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all duration-300 font-bold text-sm tracking-tight ${
+                      isActive 
+                        ? 'bg-blue-600 text-white shadow-[0_10px_30px_rgba(37,99,235,0.2)]' 
+                        : 'text-white/40 hover:text-white hover:bg-white/5'
+                    }`
                   }
                 >
                   <Icon className="h-5 w-5 opacity-90" />
@@ -67,10 +74,10 @@ const Layout = () => {
             })}
           </nav>
         </div>
-        <div className="p-5 border-t border-gray-100/50 bg-white/30 rounded-b-2xl">
-          <div className="px-4 py-3 mb-3 bg-white/50 rounded-xl shadow-sm border border-white">
-            <p className="text-sm font-bold text-gray-900 truncate">{user?.name}</p>
-            <p className="text-xs font-medium text-gray-500 truncate mt-0.5">{user?.email}</p>
+        <div className="p-6 border-t border-white/5 bg-white/5 backdrop-blur-md">
+          <div className="px-5 py-4 mb-4 bg-white/5 rounded-2xl border border-white/5">
+            <p className="text-xs font-black text-white truncate">{user?.name}</p>
+            <p className="text-[10px] font-bold text-white/30 truncate mt-1">{user?.email}</p>
           </div>
           <button 
             onClick={handleLogout}

@@ -8,22 +8,24 @@ const Home = () => {
   const navigate = useNavigate();
 
   const actions = [
-    { title: 'Create Case', desc: 'Report an issue or request service', icon: FilePlus, path: '/portal/create-case', color: 'text-blue-600', bg: 'bg-blue-100' },
-    { title: 'Track Status', desc: 'Check updates on existing cases', icon: Search, path: '/portal/track-case', color: 'text-indigo-600', bg: 'bg-indigo-100' },
-    { title: 'AI Assistant', desc: 'Get instant automated help', icon: MessageSquare, path: '/portal/chatbot', color: 'text-purple-600', bg: 'bg-purple-100' },
-    { title: 'Knowledge Base', desc: 'Search solution articles', icon: Book, path: '/portal/knowledge', color: 'text-emerald-600', bg: 'bg-emerald-100' },
+    { title: 'Create Case', icon: FilePlus, path: '/portal/create-case', color: 'text-blue-600', bg: 'bg-blue-100' },
+    { title: 'Track Status', icon: Search, path: '/portal/track-case', color: 'text-indigo-600', bg: 'bg-indigo-100' },
+    { title: 'AI Assistant', icon: MessageSquare, path: '/portal/chatbot', color: 'text-purple-600', bg: 'bg-purple-100' },
+    { title: 'Knowledge Base', icon: Book, path: '/portal/knowledge', color: 'text-emerald-600', bg: 'bg-emerald-100' },
   ];
 
   return (
     <div className="space-y-8">
-      <div className="glass-panel p-10 overflow-hidden relative border-none bg-gradient-to-br from-[#1428A0] to-[#0A1450] text-white">
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="relative z-10">
-          <h1 className="text-4xl font-extrabold tracking-tight mb-3">Welcome to CaseFlow AI</h1>
-          <p className="text-blue-100 text-lg max-w-2xl leading-relaxed">
-            Hello, <span className="font-bold text-white">{user?.name}</span>. 
-            Experience intelligent service management powered by ServiceNow Zurich. 
-            Create, track, and resolve cases faster with our automated engine.
+      <div className="glass-panel p-12 overflow-hidden relative border-white/5 bg-[#020617] text-white shadow-[0_20px_50px_rgba(37,99,235,0.15)]">
+        <div className="absolute top-[-20%] right-[-10%] w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+        <div className="relative z-10 space-y-4">
+          <div className="inline-flex items-center px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-[9px] font-black tracking-[0.2em] uppercase">
+            Enterprise Portal Active
+          </div>
+          <h1 className="text-5xl font-black tracking-tighter">Welcome back, <span className="text-blue-400">{user?.name.split(' ')[0]}</span>.</h1>
+          <p className="text-white/40 text-lg max-w-2xl font-medium leading-relaxed">
+            Your ServiceNow instance in <span className="text-white font-bold">Zurich</span> is running at peak performance. 
+            AI-routing and SLA monitoring are active for all your cases.
           </p>
         </div>
       </div>
@@ -42,11 +44,10 @@ const Home = () => {
                 <div className={`w-14 h-14 rounded-2xl ${action.bg} flex items-center justify-center mb-6 transition-transform group-hover:scale-110`}>
                   <Icon className={`h-7 w-7 ${action.color}`} />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{action.title}</h3>
-                <p className="text-sm text-gray-500 font-medium mb-6">{action.desc}</p>
-                <div className="flex items-center text-samsung-blue text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300">
-                  <span>Open</span>
-                  <ArrowRight className="h-4 w-4 ml-1" />
+                <h3 className="text-lg font-bold text-gray-900">{action.title}</h3>
+                <div className="flex items-center text-samsung-blue text-xs font-bold opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0 duration-300 mt-4">
+                  <span>ENTER</span>
+                  <ArrowRight className="h-3 w-3 ml-1" />
                 </div>
               </div>
             );
