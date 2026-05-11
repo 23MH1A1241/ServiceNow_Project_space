@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { 
   Home, FilePlus, Search, MessageSquare, Book, Bell, 
-  LogOut, Hexagon, LayoutDashboard
+  LogOut, Hexagon, LayoutDashboard, TrendingUp
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -22,6 +22,10 @@ const Layout = () => {
     
     if (user?.role === 'admin' || user?.role === 'supervisor' || user?.role === 'agent') {
       items.push({ name: 'Dashboard', path: '/portal/dashboard', icon: LayoutDashboard });
+    }
+    
+    if (user?.role === 'admin') {
+      items.push({ name: 'Agent SLA', path: '/portal/agent-sla', icon: TrendingUp });
     }
     
     items.push(
