@@ -1,153 +1,170 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bot, Zap, Shield, ChevronRight } from 'lucide-react';
+import { Bot, Zap, Shield, ArrowRight, Sparkles, Activity, Layers } from 'lucide-react';
 
 const Landing = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] overflow-hidden relative font-outfit">
-      {/* Falling Blue Balls Animation */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        {[...Array(20)].map((_, i) => (
+    <div className="min-h-screen bg-[#020617] text-white overflow-hidden relative font-outfit selection:bg-blue-500/30">
+      {/* Dynamic Animated Background */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/20 blur-[120px] rounded-full animate-pulse-slow"></div>
+        
+        {/* Falling Glowing Orbs */}
+        {[...Array(15)].map((_, i) => (
           <div
             key={i}
-            className="absolute bg-blue-500/20 rounded-full blur-xl animate-float"
+            className="absolute rounded-full shadow-[0_0_20px_rgba(59,130,246,0.5)] animate-float-glow"
             style={{
-              width: `${Math.random() * 100 + 50}px`,
-              height: `${Math.random() * 100 + 50}px`,
+              width: `${Math.random() * 60 + 20}px`,
+              height: `${Math.random() * 60 + 20}px`,
               left: `${Math.random() * 100}%`,
-              top: `${Math.random() * -100}%`,
-              animationDelay: `${Math.random() * 10}s`,
-              animationDuration: `${Math.random() * 10 + 10}s`,
-              opacity: Math.random() * 0.5 + 0.1
+              top: `${Math.random() * -20}%`,
+              background: `radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.8), rgba(30, 58, 138, 0.4))`,
+              animationDelay: `${Math.random() * 15}s`,
+              animationDuration: `${Math.random() * 20 + 10}s`,
+              opacity: Math.random() * 0.6 + 0.2
             }}
           />
         ))}
       </div>
 
       {/* Navigation */}
-      <nav className="relative z-10 max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 samsung-gradient rounded-xl flex items-center justify-center shadow-lg">
-            <Bot className="text-white h-6 w-6" />
+      <nav className="relative z-20 max-w-7xl mx-auto px-8 py-10 flex justify-between items-center">
+        <div className="flex items-center space-x-3 group cursor-pointer">
+          <div className="w-12 h-12 bg-white/5 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-blue-500/50 transition-all duration-500 shadow-2xl">
+            <Bot className="text-blue-400 h-7 w-7 group-hover:scale-110 transition-transform" />
           </div>
-          <span className="text-2xl font-black text-gray-900 tracking-tighter">CaseFlow AI</span>
+          <span className="text-3xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">
+            CaseFlow
+          </span>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-8">
           <button 
             onClick={() => navigate('/login')}
-            className="px-6 py-2.5 font-bold text-gray-600 hover:text-samsung-blue transition-colors"
+            className="text-sm font-bold text-white/60 hover:text-white transition-colors tracking-widest uppercase"
           >
             Login
           </button>
           <button 
             onClick={() => navigate('/signup')}
-            className="px-6 py-2.5 samsung-gradient text-white font-bold rounded-xl shadow-lg hover:scale-105 transition-all shadow-blue-500/25"
+            className="px-8 py-3 bg-white text-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)]"
           >
-            Sign Up
+            JOIN NOW
           </button>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <main className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-32 grid lg:grid-cols-2 gap-12 items-center">
-        <div className="space-y-8 animate-fade-in-up">
-          <div className="inline-flex items-center px-4 py-2 bg-blue-50 border border-blue-100 rounded-full text-samsung-blue text-sm font-bold tracking-wide uppercase shadow-sm">
-            <Zap className="w-4 h-4 mr-2 fill-current" />
-            Next-Gen Enterprise Support
-          </div>
-          <h1 className="text-6xl md:text-7xl font-black text-gray-900 leading-[0.95] tracking-tight">
-            Automate your <br />
-            <span className="text-transparent bg-clip-text samsung-gradient">Service Workflow</span>
-          </h1>
-          <p className="text-xl text-gray-500 font-medium max-w-lg leading-relaxed">
-            CaseFlow AI leverages high-performance routing engines to categorize, assign, and escalate enterprise cases in real-time.
+      <main className="relative z-10 max-w-7xl mx-auto px-8 pt-20 pb-40 text-center">
+        <div className="inline-flex items-center px-4 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-[10px] font-black tracking-[0.2em] uppercase mb-10 animate-fade-in">
+          <Sparkles className="w-3 h-3 mr-2" />
+          AI-Powered Automation
+        </div>
+        
+        <h1 className="text-7xl md:text-[9rem] font-black leading-[0.85] tracking-tighter mb-12 animate-slide-up-glow">
+          THINK <br /> 
+          <span className="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">FASTER.</span>
+        </h1>
+
+        <div className="flex flex-col items-center space-y-12 animate-fade-in-delayed">
+          <p className="text-lg text-white/40 font-medium max-w-md leading-relaxed">
+            Eliminate manual routing. Let AI handle your enterprise service workflow with zero latency.
           </p>
-          <div className="flex items-center space-x-6 pt-4">
+
+          <div className="flex items-center space-x-6">
             <button 
               onClick={() => navigate('/signup')}
-              className="px-8 py-4 samsung-gradient text-white font-black rounded-2xl shadow-xl hover:scale-105 transition-all flex items-center shadow-blue-500/30 text-lg"
+              className="px-12 py-5 bg-blue-600 text-white font-black rounded-[2rem] shadow-[0_20px_50px_rgba(37,99,235,0.3)] hover:bg-blue-500 hover:scale-105 active:scale-95 transition-all text-xl flex items-center group"
             >
-              Get Started Free <ChevronRight className="ml-2 w-5 h-5" />
+              Get Started <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform" />
             </button>
-            <div className="flex -space-x-3">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="w-12 h-12 rounded-full border-4 border-white bg-gray-200 overflow-hidden shadow-sm">
-                  <img src={`https://i.pravatar.cc/150?u=${i}`} alt="user" className="w-full h-full object-cover" />
-                </div>
-              ))}
-              <div className="w-12 h-12 rounded-full border-4 border-white bg-blue-50 flex items-center justify-center text-samsung-blue text-xs font-bold shadow-sm">
-                +2k
-              </div>
-            </div>
           </div>
         </div>
 
-        <div className="relative animate-fade-in-right">
-          <div className="absolute -inset-4 bg-samsung-blue opacity-10 blur-3xl rounded-[4rem]"></div>
-          <div className="relative glass-panel p-4 border border-white shadow-2xl rounded-[2.5rem] overflow-hidden">
-             <div className="bg-[#0A1450] rounded-[2rem] p-8 aspect-[4/3] flex flex-col justify-between relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 opacity-20 rounded-full blur-3xl"></div>
-                <div className="relative z-10 flex justify-between items-start">
-                   <div className="space-y-1">
-                      <p className="text-blue-300 text-xs font-bold uppercase tracking-widest">Active System Load</p>
-                      <p className="text-4xl font-black text-white tracking-tighter">98.4%</p>
-                   </div>
-                   <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-md border border-white/10">
-                      <Shield className="text-blue-400 w-6 h-6" />
-                   </div>
-                </div>
-                <div className="relative z-10 flex items-end justify-between">
-                   <div className="flex space-x-2">
-                      {[40, 70, 45, 90, 65, 80, 55].map((h, i) => (
-                        <div key={i} className="w-2 bg-blue-400/30 rounded-full relative" style={{ height: '60px' }}>
-                          <div className="absolute bottom-0 w-full bg-blue-400 rounded-full animate-grow-up" style={{ height: `${h}%`, animationDelay: `${i * 0.1}s` }}></div>
-                        </div>
-                      ))}
-                   </div>
-                   <div className="text-right">
-                      <p className="text-blue-200 text-sm font-bold">Latency: 12ms</p>
-                      <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest">Zurich Instance</p>
-                   </div>
-                </div>
-             </div>
-          </div>
+        {/* Floating Abstract UI Elements */}
+        <div className="mt-32 relative h-64 w-full hidden md:block">
+           <div className="absolute left-[10%] top-0 p-6 glass-panel border-white/5 rounded-3xl animate-float shadow-2xl backdrop-blur-3xl w-64 text-left">
+              <Activity className="text-blue-400 mb-4 h-8 w-8" />
+              <p className="text-white/40 text-[10px] font-black uppercase tracking-widest mb-1">Status</p>
+              <p className="text-xl font-black">99.9% Up</p>
+           </div>
+           <div className="absolute right-[15%] top-10 p-6 glass-panel border-white/5 rounded-3xl animate-float-delayed shadow-2xl backdrop-blur-3xl w-64 text-left">
+              <Layers className="text-purple-400 mb-4 h-8 w-8" />
+              <p className="text-white/40 text-[10px] font-black uppercase tracking-widest mb-1">Queue</p>
+              <p className="text-xl font-black">Automated</p>
+           </div>
+           <div className="absolute left-[40%] bottom-0 p-6 glass-panel border-white/5 rounded-3xl animate-float-slow shadow-2xl backdrop-blur-3xl w-72 text-left">
+              <div className="flex items-center space-x-3 mb-4">
+                 <div className="w-3 h-3 bg-green-500 rounded-full animate-ping"></div>
+                 <p className="text-xs font-bold">New Case Routed</p>
+              </div>
+              <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                 <div className="h-full bg-blue-500 w-3/4 animate-pulse"></div>
+              </div>
+           </div>
         </div>
       </main>
 
-      {/* Features Grid */}
-      <section className="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-3 gap-8 relative z-10">
+      {/* Visual Feature Grid - Minimalist */}
+      <section className="relative z-10 max-w-5xl mx-auto px-8 pb-40 grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { title: 'AI Categorization', desc: 'Auto-route cases using advanced keyword extraction.', icon: Bot, color: 'bg-blue-50 text-blue-600' },
-          { title: 'SLA Monitoring', desc: 'Predictive analytics for service level compliance.', icon: Zap, color: 'bg-orange-50 text-orange-600' },
-          { title: 'Role-Based Access', desc: 'Secure portals for Admin, Agent, and Customers.', icon: Shield, color: 'bg-emerald-50 text-emerald-600' }
+          { label: 'ROUTING', icon: Bot },
+          { label: 'SLA', icon: Zap },
+          { label: 'SECURITY', icon: Shield },
+          { label: 'METRICS', icon: Activity }
         ].map((f, i) => (
-          <div key={i} className="glass-panel p-8 group hover:border-samsung-blue/30 transition-all cursor-default">
-            <div className={`w-14 h-14 rounded-2xl ${f.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-              <f.icon className="w-7 h-7" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3 tracking-tight">{f.title}</h3>
-            <p className="text-gray-500 font-medium leading-relaxed">{f.desc}</p>
+          <div key={i} className="glass-panel py-10 flex flex-col items-center justify-center border-white/5 hover:bg-white/5 transition-all cursor-pointer group">
+             <f.icon className="w-8 h-8 text-blue-500/50 group-hover:text-blue-400 group-hover:scale-125 transition-all duration-500" />
+             <span className="mt-4 text-[10px] font-black tracking-[0.3em] text-white/30 group-hover:text-white transition-colors">{f.label}</span>
           </div>
         ))}
       </section>
 
       <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes float-glow {
+          0% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(110vh) rotate(180deg); }
+          100% { transform: translateY(0) rotate(360deg); }
+        }
+        .animate-float-glow {
+          animation: float-glow infinite linear;
+        }
+        @keyframes slide-up-glow {
+          from { transform: translateY(50px); opacity: 0; filter: blur(20px); }
+          to { transform: translateY(0); opacity: 1; filter: blur(0); }
+        }
+        .animate-slide-up-glow {
+          animation: slide-up-glow 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .animate-fade-in {
+          animation: fade-in 1s ease-out forwards;
+        }
+        .animate-fade-in-delayed {
+          animation: fade-in 1s ease-out 0.5s forwards;
+          opacity: 0;
+        }
         @keyframes float {
-          0% { transform: translateY(0) scale(1); }
-          50% { transform: translateY(100vh) scale(1.2); }
-          100% { transform: translateY(0) scale(1); }
+          0%, 100% { transform: translateY(0) translateX(0); }
+          50% { transform: translateY(-20px) translateX(10px); }
         }
         .animate-float {
-          animation: float infinite linear;
+          animation: float 6s ease-in-out infinite;
         }
-        @keyframes grow-up {
-          from { height: 0; }
-          to { height: 100%; }
+        .animate-float-delayed {
+          animation: float 8s ease-in-out infinite 1s;
         }
-        .animate-grow-up {
-          animation: grow-up 1s ease-out forwards;
+        .animate-float-slow {
+          animation: float 10s ease-in-out infinite 2s;
+        }
+        .pulse-slow {
+          animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
       `}} />
     </div>

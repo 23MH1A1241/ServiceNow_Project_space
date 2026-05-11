@@ -5,7 +5,7 @@
 @layer base {
   body {
     @apply bg-samsung-light text-gray-900 antialiased overflow-x-hidden;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Outfit', 'Inter', system-ui, sans-serif;
   }
 }
 

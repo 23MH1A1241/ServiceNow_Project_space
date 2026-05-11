@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
-import { Hexagon, User, Lock, Loader2, ArrowRight } from 'lucide-react';
+import { useNavigate, Navigate, Link } from 'react-router-dom';
+import { Bot, User, Lock, Loader2, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
@@ -21,61 +21,70 @@ const Login = () => {
       await login(username, password);
       navigate('/portal');
     } catch (err) {
-      setError(err.message || 'Authentication failed. Please check credentials.');
+      setError(err.message || 'Authentication failed.');
     }
   };
 
   return (
-    <div className="min-h-screen bg-samsung-light flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-[#020617] text-white flex flex-col items-center justify-center p-6 font-outfit relative overflow-hidden selection:bg-blue-500/30">
       {/* Background elements */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-samsung-blue rounded-full opacity-5 blur-[100px] animate-pulse-slow"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#0A1450] rounded-full opacity-5 blur-[120px]"></div>
+      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-600/10 blur-[150px] rounded-full animate-pulse"></div>
+      <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-indigo-600/10 blur-[150px] rounded-full animate-pulse-slow"></div>
 
-      <div className="glass-panel w-full max-w-md p-10 z-10 animate-slide-up">
-        <div className="text-center mb-10">
-          <div className="mx-auto samsung-gradient w-20 h-20 rounded-2xl flex items-center justify-center mb-6 shadow-xl shadow-blue-900/20">
-            <Hexagon className="h-10 w-10 text-white" />
+      <Link to="/" className="flex items-center space-x-3 mb-16 relative z-10 hover:scale-105 transition-transform group">
+        <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-blue-500/50 transition-all shadow-2xl">
+          <Bot className="text-blue-400 h-7 w-7" />
+        </div>
+        <span className="text-3xl font-black tracking-tighter">CaseFlow</span>
+      </Link>
+
+      <div className="glass-panel w-full max-w-md p-12 relative z-10 shadow-2xl border border-white/5 backdrop-blur-3xl">
+        <div className="mb-12">
+          <div className="inline-flex items-center px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-[9px] font-black tracking-[0.2em] uppercase mb-4">
+              <Sparkles className="w-3 h-3 mr-2" />
+              Secure Gateway
           </div>
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">CaseFlow AI</h1>
-          <p className="text-gray-500 mt-2 font-medium">ServiceNow Enterprise Portal</p>
+          <h1 className="text-5xl font-black tracking-tighter mb-2">Login</h1>
+          <p className="text-white/30 font-medium">Authenticate to enter the portal.</p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-700 text-sm rounded-xl font-medium shadow-sm animate-fade-in">
+          <div className="mb-10 p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-2xl text-xs font-bold flex items-center animate-shake">
+            <span className="w-2 h-2 bg-red-500 rounded-full mr-3 animate-ping"></span>
             {error}
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div>
-            <label className="label-text">ServiceNow Username</label>
+        <form onSubmit={handleLogin} className="space-y-8">
+          <div className="space-y-2">
+            <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] ml-1">Username</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <User className="h-5 w-5 text-gray-400" />
+                <User className="h-5 w-5 text-white/20" />
               </div>
               <input
                 type="text"
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="input-field pl-12"
-                placeholder="admin, vinay, agent1..."
+                className="w-full pl-12 pr-6 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all font-bold text-white placeholder-white/10 shadow-inner"
+                placeholder="admin, agent1..."
               />
             </div>
           </div>
 
-          <div>
-            <label className="label-text">Password</label>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] ml-1">Password</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-gray-400" />
+                <Lock className="h-5 w-5 text-white/20" />
               </div>
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="input-field pl-12"
+                className="w-full pl-12 pr-6 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all font-bold text-white placeholder-white/10 shadow-inner"
                 placeholder="••••••••"
               />
             </div>
@@ -84,22 +93,25 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full btn-primary py-4 mt-8"
+            className="w-full bg-blue-600 text-white py-6 rounded-[2rem] font-black text-xl shadow-[0_20px_50px_rgba(37,99,235,0.3)] hover:bg-blue-500 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center space-x-3 disabled:opacity-50 mt-6"
           >
             {loading ? (
-              <Loader2 className="h-6 w-6 animate-spin" />
+              <Loader2 className="h-7 w-7 animate-spin" />
             ) : (
               <>
-                <span className="text-lg">Secure Login</span>
-                <ArrowRight className="h-5 w-5" />
+                <span>Secure Access</span>
+                <ArrowRight className="h-6 w-6" />
               </>
             )}
           </button>
         </form>
         
-        <div className="mt-8 text-center">
-            <p className="text-xs text-gray-400 font-medium">Powered by ServiceNow Zurich</p>
-        </div>
+        <p className="mt-10 text-center text-white/20 font-bold text-sm">
+          New user?{' '}
+          <Link to="/signup" className="text-blue-400 hover:text-blue-300 hover:underline transition-colors">
+            Register Identity
+          </Link>
+        </p>
       </div>
     </div>
   );
