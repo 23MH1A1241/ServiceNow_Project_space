@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, Loader2, AlertCircle, Clock, Tag, FileText } from 'lucide-react';
-import { getCase } from '../api/serviceNow';
+import { getCase, triggerAgentMatching } from '../api/serviceNow';
 
 const TrackCase = () => {
   const [searchParams] = useSearchParams();
@@ -12,6 +12,7 @@ const TrackCase = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [csatRating, setCsatRating] = useState(0);
+  const [matchingLoading, setMatchingLoading] = useState(false);
 
   const handleSearch = useCallback(async (e) => {
     if (e) e.preventDefault();
@@ -105,6 +106,20 @@ const TrackCase = () => {
               </div>
               <p className="text-xl text-gray-600 font-medium">{caseData.short_description}</p>
             </div>
+            {!isClosed && (
+              <button
+                onClick={async () => {
+                  setMatchingLoading(true);
+                  await triggerAgentMatching(caseData.sys_id);
+                  setMatchingLoading(false);
+                  alert('AI Routing engine has been triggered to optimize agent assignment.');
+                }}
+                disabled={matchingLoading}
+                className="mt-4 md:mt-0 text-sm font-bold text-samsung-blue bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-xl border border-blue-200 transition-all flex items-center space-x-2"
+              >
+                {matchingLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <span>⚡ AI Re-assign</span>}
+              </button>
+            )}
           </div>
 
           {/* Timeline Visualizer */}
