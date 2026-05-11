@@ -55,8 +55,8 @@ const Chatbot = () => {
     setIsCreatingCase(true);
     try {
       const newCase = await createCase({
-        short_description: `Escalated from AI Chat: ${query.slice(0, 50)}...`,
-        description: `User reported that the AI resolution for "${query}" did not work. Escalate to human agent.`,
+        short_description: query.length > 60 ? query.slice(0, 60) + "..." : query,
+        description: `Source: CaseFlow AI Chatbot\n\nUser Issue: ${query}\n\nResolution attempted: The AI provided troubleshooting steps but the user requested escalation to a human specialist.`,
         priority: '2',
         caller_id: user?.sys_id
       });
