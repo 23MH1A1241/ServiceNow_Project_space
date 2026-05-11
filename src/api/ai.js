@@ -13,31 +13,27 @@ export const getAIResolution = async (query, role = 'customer', context = {}) =>
   const scenarios = [
     {
       keywords: ['hi', 'hello', 'hey', 'greetings'],
-      response: `Identity verified. Systems nominal. How can I assist your enterprise workflow today, ${role === 'customer' ? 'valued user' : 'Specialist'}?`
+      response: `Hello! I am CaseFlow AI. I've verified your identity and I'm ready to help. How can I assist you today?`
     },
     {
       keywords: ['vpn', 'globalprotect', 'anyconnect', 'remote', 'connect'],
-      response: "Neural Resolution: I detected a potential handshake failure in your remote access profile. \n\nSteps to resolve:\n1. Close all active browser sessions.\n2. Open the VPN client and select the 'Renew Connection' option.\n3. If using 2FA, ensure your token clock is synchronized.\n4. Flush your local DNS cache by running 'ipconfig /flushdns' in the terminal."
+      response: "It sounds like you're having trouble with your VPN. Here are a few things you can try right now:\n\n1. Ensure you have a stable internet connection first.\n2. Open your VPN client and try to 'Renew' or 'Re-connect'.\n3. Restart your laptop—this often fixes session token issues.\n4. If you still can't connect, please use the button below to raise a support case."
     },
     {
       keywords: ['password', 'reset', 'login', 'access', 'sso', 'account'],
-      response: "Security Protocol Identified: I can guide you through the automated identity recovery process. \n\n1. Navigate to the Secure Gateway portal.\n2. Enter your corporate ID and select 'Challenge Identity'.\n3. Complete the biometric or MFA prompt on your mobile device.\n4. Your temporary access token will be provisioned instantly."
+      response: "I can help with account access! To reset your password securely:\n\n1. Go to the main SSO login page.\n2. Click on 'Forgot Password' or 'Reset Account'.\n3. Check your mobile device for a security code.\n4. Enter the code to set your new password. \n\nLet me know if that works!"
     },
     {
       keywords: ['internet', 'network', 'wifi', 'slow', 'connection', 'offline'],
-      response: "Diagnostics complete: Your local network interface is reporting intermittent packet loss. \n\n1. Toggle your hardware wireless switch off for 5 seconds.\n2. Verify that you are not on a public 'Guest' network which may have restricted protocols.\n3. Release and renew your IP address via terminal: 'ipconfig /renew'.\n4. If at the office, ensure your Ethernet cable is seated in the docking station."
+      response: "Networking issues can be frustrating. Let's try to fix your connection:\n\n1. Try turning your Wi-Fi off and back on again.\n2. Make sure you aren't on a 'Guest' network by mistake.\n3. If you're using a docking station, ensure the cable is plugged in firmly.\n4. Restarting your router (if at home) or your laptop often clears these issues."
     },
     {
       keywords: ['outlook', 'email', 'teams', 'message', 'office', '365'],
-      response: "Service Analysis: Synchronizing your communication suite now. \n\n1. Check if 'Work Offline' mode is accidentally enabled in the Status bar.\n2. Clear the application cache: %appdata%\\Local\\Microsoft\\Teams.\n3. Restart the suite to trigger a fresh OAuth token fetch.\n4. Your messages should begin populating within 60 seconds."
-    },
-    {
-      keywords: ['laptop', 'slow', 'freeze', 'restart', 'hardware'],
-      response: "Hardware telemetry analysis: System resources are currently peaking. \n\n1. Identify high-consumption processes in Task Manager (Ctrl+Shift+Esc).\n2. Perform a 'Hard Reset' by holding the power button for 10 seconds while unplugged.\n3. Check for background system updates that may be indexing files.\n4. If the device remains unresponsive, I recommend raising a High-Priority case for the hardware team."
+      response: "I'll help you get your communications back on track:\n\n1. Check if Outlook is in 'Offline Mode' (look at the bottom status bar).\n2. For Teams, try quitting the app completely and restarting it.\n3. If emails aren't sending, check your 'Outbox' to see if a large attachment is stuck.\n4. Still having trouble? I can escalate this for you."
     },
     {
       keywords: ['thanks', 'thank', 'perfect', 'resolved', 'fixed'],
-      response: "Efficiency target achieved. I have updated the case logs with this resolution. Is there anything else I can optimize for you today?"
+      response: "You're very welcome! I'm glad I could help. Is there anything else you need assistance with?"
     }
   ];
 
@@ -48,6 +44,6 @@ export const getAIResolution = async (query, role = 'customer', context = {}) =>
     return match.response;
   }
 
-  // General Fallback (Understandable and professional)
-  return `I have analyzed your request regarding "${query}". \n\nTo provide the most accurate resolution, I am cross-referencing your hardware profile with our knowledge base. In the meantime, please ensure your system is connected to the secure enterprise backbone. Would you like me to escalate this to a specialist for a deeper investigation?`;
+  // General Fallback (Very human and helpful)
+  return `I've looked into your request regarding "${query}". While I don't have a specific automated fix for this right now, I recommend trying a quick restart of your application or device as a first step. \n\nIf the problem persists, please click the button below to raise a case so one of our human experts can take a look for you!`;
 };

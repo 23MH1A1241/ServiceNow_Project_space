@@ -41,7 +41,11 @@ const Chatbot = () => {
         canEscalate: true
       }]);
     } catch (err) {
-      setMessages(prev => [...prev, { role: 'bot', content: "Interface error. Connection to Neural Engine lost." }]);
+      setMessages(prev => [...prev, { 
+        role: 'bot', 
+        content: "Interface error. Connection to Neural Engine lost.",
+        canEscalate: true 
+      }]);
     } finally {
       setIsTyping(false);
     }
