@@ -9,9 +9,11 @@ import TrackCase from './pages/TrackCase';
 import Dashboard from './pages/Dashboard';
 import Chatbot from './pages/Chatbot';
 import KnowledgeBase from './pages/KnowledgeBase';
+import Landing from './pages/Landing';
+import Signup from './pages/Signup';
+import Escalations from './pages/Escalations';
 import Notifications from './pages/Notifications';
 import SlaMonitoring from './pages/SlaMonitoring';
-import Escalations from './pages/Escalations';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -35,9 +37,11 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         
-        <Route path="/" element={
+        <Route path="/portal" element={
           <ProtectedRoute>
             <Layout />
           </ProtectedRoute>
@@ -52,6 +56,9 @@ const App = () => {
           <Route path="sla-monitoring" element={<SlaMonitoring />} />
           <Route path="escalations" element={<Escalations />} />
         </Route>
+        
+        {/* Redirect unknown routes to landing */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

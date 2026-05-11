@@ -11,7 +11,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   if (user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/portal" replace />;
   }
 
   const handleLogin = async (e) => {
@@ -19,7 +19,7 @@ const Login = () => {
     setError('');
     try {
       await login(username, password);
-      navigate('/');
+      navigate('/portal');
     } catch (err) {
       setError(err.message || 'Authentication failed. Please check credentials.');
     }

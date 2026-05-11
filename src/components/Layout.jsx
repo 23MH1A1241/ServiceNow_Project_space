@@ -17,19 +17,19 @@ const Layout = () => {
 
   const getNavItems = () => {
     const items = [
-      { name: 'Home', path: '/', icon: Home },
+      { name: 'Home', path: '/portal', icon: Home },
     ];
     
     if (user?.role === 'admin' || user?.role === 'supervisor' || user?.role === 'agent') {
-      items.push({ name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard });
+      items.push({ name: 'Dashboard', path: '/portal/dashboard', icon: LayoutDashboard });
     }
     
     items.push(
-      { name: 'Create Case', path: '/create-case', icon: FilePlus },
-      { name: 'Track Case', path: '/track-case', icon: Search },
-      { name: 'AI Chatbot', path: '/chatbot', icon: MessageSquare },
-      { name: 'Knowledge Base', path: '/knowledge', icon: Book },
-      { name: 'Notifications', path: '/notifications', icon: Bell }
+      { name: 'Create Case', path: '/portal/create-case', icon: FilePlus },
+      { name: 'Track Case', path: '/portal/track-case', icon: Search },
+      { name: 'AI Chatbot', path: '/portal/chatbot', icon: MessageSquare },
+      { name: 'Knowledge Base', path: '/portal/knowledge', icon: Book },
+      { name: 'Notifications', path: '/portal/notifications', icon: Bell }
     );
     
     return items;

@@ -301,3 +301,25 @@ export const fetchNotifications = async () => {
     return [];
   }
 };
+
+/**
+ * Creates a new user in ServiceNow sys_user table
+ */
+export const createUser = async (userData) => {
+  try {
+    const data = {
+      user_name: userData.username,
+      first_name: userData.firstName,
+      last_name: userData.lastName,
+      email: userData.email,
+      user_password: userData.password,
+      active: true,
+      introduction: 'customer' // Using this as a role hint
+    };
+    const response = await client.post(`/api/now/table/${USER_TABLE}`, data);
+    return response.data.result;
+  } catch (error) {
+    console.error('Error creating user:', error);
+    throw new Error('Failed to create account. User might already exist.');
+  }
+};

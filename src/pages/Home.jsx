@@ -8,10 +8,10 @@ const Home = () => {
   const navigate = useNavigate();
 
   const actions = [
-    { title: 'Create Case', desc: 'Report an issue or request service', icon: FilePlus, path: '/create-case', color: 'text-blue-600', bg: 'bg-blue-100' },
-    { title: 'Track Status', desc: 'Check updates on existing cases', icon: Search, path: '/track-case', color: 'text-indigo-600', bg: 'bg-indigo-100' },
-    { title: 'AI Assistant', desc: 'Get instant automated help', icon: MessageSquare, path: '/chatbot', color: 'text-purple-600', bg: 'bg-purple-100' },
-    { title: 'Knowledge Base', desc: 'Search solution articles', icon: Book, path: '/knowledge', color: 'text-emerald-600', bg: 'bg-emerald-100' },
+    { title: 'Create Case', desc: 'Report an issue or request service', icon: FilePlus, path: '/portal/create-case', color: 'text-blue-600', bg: 'bg-blue-100' },
+    { title: 'Track Status', desc: 'Check updates on existing cases', icon: Search, path: '/portal/track-case', color: 'text-indigo-600', bg: 'bg-indigo-100' },
+    { title: 'AI Assistant', desc: 'Get instant automated help', icon: MessageSquare, path: '/portal/chatbot', color: 'text-purple-600', bg: 'bg-purple-100' },
+    { title: 'Knowledge Base', desc: 'Search solution articles', icon: Book, path: '/portal/knowledge', color: 'text-emerald-600', bg: 'bg-emerald-100' },
   ];
 
   return (
