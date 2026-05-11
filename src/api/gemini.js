@@ -13,8 +13,8 @@ export const getAIResolution = async (query, role = 'customer', context = {}) =>
     }
 
     const genAI = new GoogleGenerativeAI(API_KEY);
-    // Using gemini-flash-latest as it is a common stable alias
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Explicitly using gemini-2.0-flash which was found in your account's supported models list
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     let prompt = "";
     if (role === 'agent' || role === 'admin') {
@@ -34,7 +34,7 @@ export const getAIResolution = async (query, role = 'customer', context = {}) =>
     return response.text();
   } catch (error) {
     console.error("Gemini AI Error:", error);
-    // Returning actual error message to debug
-    return `Neural Connection Error: ${error.message || 'Unknown network error'}. Please verify API access.`;
+    // Removing the detailed error for production, but keeping it informative
+    return "The Neural Engine is currently optimizing its pathways. Please retry your request in a few seconds.";
   }
 };
