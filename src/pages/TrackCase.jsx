@@ -11,6 +11,7 @@ const TrackCase = () => {
   const [caseData, setCaseData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [csatRating, setCsatRating] = useState(0);
 
   const handleSearch = useCallback(async (e) => {
     if (e) e.preventDefault();
@@ -157,6 +158,36 @@ const TrackCase = () => {
               </div>
             </div>
           </div>
+
+          {/* CSAT Survey for Resolved Cases */}
+          {isClosed && (
+            <div className="mt-10 pt-8 border-t border-gray-100 animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <div className="bg-emerald-50/50 rounded-2xl p-6 border border-emerald-100 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                <div className="text-center md:text-left">
+                  <h4 className="text-lg font-bold text-emerald-900">How was your experience?</h4>
+                  <p className="text-sm text-emerald-700">Your feedback helps us improve our enterprise support.</p>
+                </div>
+                <div className="flex space-x-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => setCsatRating(star)}
+                      className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl transition-all shadow-sm ${
+                        csatRating >= star ? 'bg-yellow-400 text-white scale-110 shadow-yellow-200' : 'bg-white text-gray-300 border border-emerald-100 hover:border-yellow-300'
+                      }`}
+                    >
+                      ★
+                    </button>
+                  ))}
+                  {csatRating > 0 && (
+                    <div className="ml-4 flex items-center text-emerald-600 font-bold animate-bounce-short">
+                      <span>Thank you!</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
