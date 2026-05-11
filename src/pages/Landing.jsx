@@ -65,8 +65,8 @@ const Landing = () => {
         </div>
         
         <h1 className="text-7xl md:text-[9rem] font-black leading-[0.85] tracking-tighter mb-12 animate-slide-up-glow">
-          THINK <br /> 
-          <span className="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">FASTER.</span>
+          CASEFLOW <br /> 
+          <span className="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">AI.</span>
         </h1>
 
         <div className="flex flex-col items-center space-y-12 animate-fade-in-delayed">

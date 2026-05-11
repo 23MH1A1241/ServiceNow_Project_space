@@ -75,14 +75,14 @@ const Signup = () => {
         <span className="text-3xl font-black tracking-tighter">CaseFlow</span>
       </Link>
 
-      <div className="glass-panel w-full max-w-xl p-12 relative z-10 shadow-2xl border border-white/5 backdrop-blur-3xl">
+      <div className="glass-panel w-full max-w-xl p-12 relative z-10 shadow-2xl border border-white/10 backdrop-blur-3xl bg-white/5">
         <div className="mb-12">
            <div className="inline-flex items-center px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-[9px] font-black tracking-[0.2em] uppercase mb-4">
               <Sparkles className="w-3 h-3 mr-2" />
               Onboarding
            </div>
            <h2 className="text-5xl font-black tracking-tighter mb-2">Create Identity</h2>
-           <p className="text-white/30 font-medium">Secure your spot in the automated enterprise.</p>
+           <p className="text-white/50 font-medium">Secure your spot in the automated enterprise.</p>
         </div>
 
         {error && (
@@ -95,54 +95,54 @@ const Signup = () => {
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] ml-1">First Name</label>
+              <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-1">First Name</label>
               <input
                 type="text"
                 name="firstName"
                 required
                 placeholder="John"
-                className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all font-bold text-white placeholder-white/10 shadow-inner"
+                className="w-full px-6 py-4 bg-white border border-white/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all font-bold text-gray-900 placeholder-gray-300 shadow-xl"
                 onChange={handleChange}
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] ml-1">Last Name</label>
+              <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-1">Last Name</label>
               <input
                 type="text"
                 name="lastName"
                 required
                 placeholder="Doe"
-                className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all font-bold text-white placeholder-white/10 shadow-inner"
+                className="w-full px-6 py-4 bg-white border border-white/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all font-bold text-gray-900 placeholder-gray-300 shadow-xl"
                 onChange={handleChange}
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] ml-1">Enterprise Username</label>
+            <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-1">Enterprise Username</label>
             <div className="relative">
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/20" />
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input
                 type="text"
                 name="username"
                 required
                 placeholder="jdoe_admin"
-                className="w-full pl-12 pr-6 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all font-bold text-white placeholder-white/10 shadow-inner uppercase tracking-wider text-xs"
+                className="w-full pl-12 pr-6 py-4 bg-white border border-white/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all font-bold text-gray-900 placeholder-gray-300 shadow-xl uppercase tracking-wider text-xs"
                 onChange={handleChange}
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] ml-1">Corporate Email</label>
+            <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-1">Corporate Email</label>
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/20" />
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input
                 type="email"
                 name="email"
                 required
                 placeholder="john.doe@enterprise.com"
-                className="w-full pl-12 pr-6 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all font-bold text-white placeholder-white/10 shadow-inner"
+                className="w-full pl-12 pr-6 py-4 bg-white border border-white/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all font-bold text-gray-900 placeholder-gray-300 shadow-xl"
                 onChange={handleChange}
               />
             </div>
@@ -150,27 +150,27 @@ const Signup = () => {
 
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] ml-1">Password</label>
+              <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-1">Password</label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/20" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
                   type="password"
                   name="password"
                   required
                   placeholder="••••••••"
-                  className="w-full pl-12 pr-6 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all font-bold text-white placeholder-white/10 shadow-inner"
+                  className="w-full pl-12 pr-6 py-4 bg-white border border-white/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all font-bold text-gray-900 placeholder-gray-300 shadow-xl"
                   onChange={handleChange}
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] ml-1">Verify</label>
+              <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-1">Verify</label>
               <input
                 type="password"
                 name="confirmPassword"
                 required
                 placeholder="••••••••"
-                className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all font-bold text-white placeholder-white/10 shadow-inner"
+                className="w-full px-6 py-4 bg-white border border-white/10 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all font-bold text-gray-900 placeholder-gray-300 shadow-xl"
                 onChange={handleChange}
               />
             </div>
