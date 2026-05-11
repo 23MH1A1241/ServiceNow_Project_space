@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<unload unload_date="2026-05-11 11:50:00">
-    <!-- 1. PROCESSING LAYER: Script Includes -->
+<unload unload_date="2026-05-11 11:55:00">
+    <!-- SEVEN-LAYER ARCHITECTURE IMPLEMENTATION -->
+
+    <!-- 1. INGESTION LAYER: IntegrationHub Wrapper -->
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <name>IngestionLayer</name>
+        <script><![CDATA[
+var IngestionLayer = Class.create();
+IngestionLayer.prototype = {
+    initialize: function() {},
+    processIncomingCase: function(payload) {
+        var caseGr = new GlideRecord('sn_customerservice_case');
+        caseGr.initialize();
+        caseGr.short_description = payload.short_description;
+        caseGr.description = payload.description;
+        caseGr.contact = payload.contact_id;
+        // Trigger Processing Layer
+        new CaseCategorizationEngine().categorize(caseGr);
+        var sysId = caseGr.insert();
+        return sysId;
+    },
+    type: 'IngestionLayer'
+};
+        ]]></script>
+    </sys_script_include>
+
+    <!-- 2. PROCESSING LAYER: AI Engines -->
     <sys_script_include action="INSERT_OR_UPDATE">
         <name>CaseCategorizationEngine</name>
         <script><![CDATA[
@@ -10,12 +35,12 @@ CaseCategorizationEngine.prototype = {
     categorize: function(current) {
         var text = (current.short_description + " " + current.description).toLowerCase();
         var keywords = {
-            "hardware": ["laptop", "monitor", "keyboard", "mouse", "printer", "battery", "hardware", "screen", "tablet", "docking", "webcam"],
-            "network": ["wifi", "internet", "vpn", "connection", "network", "router", "dns", "ip", "ethernet", "firewall", "bandwidth"],
-            "software": ["office", "outlook", "excel", "windows", "software", "install", "update", "drivers", "browser", "adobe", "teams"],
-            "security": ["password", "access", "lockout", "mfa", "permission", "unauthorized", "phishing", "breach", "virus", "malware", "token"],
-            "account": ["login", "profile", "account", "ad", "username", "sso", "portal", "onboarding", "offboarding"],
-            "infrastructure": ["server", "outage", "database", "cloud", "aws", "azure", "vcenter", "storage", "virtual", "cluster"]
+            "hardware": ["laptop", "monitor", "keyboard", "mouse", "printer", "battery", "hardware", "screen", "tablet", "docking", "webcam", "charger", "display"],
+            "network": ["wifi", "internet", "vpn", "connection", "network", "router", "dns", "ip", "ethernet", "firewall", "bandwidth", "latency", "signal"],
+            "software": ["office", "outlook", "excel", "windows", "software", "install", "update", "drivers", "browser", "adobe", "teams", "slack", "zoom"],
+            "security": ["password", "access", "lockout", "mfa", "permission", "unauthorized", "phishing", "breach", "virus", "malware", "token", "encryption", "firewall"],
+            "account": ["login", "profile", "account", "ad", "username", "sso", "portal", "onboarding", "offboarding", "credentials", "idm"],
+            "infrastructure": ["server", "outage", "database", "cloud", "aws", "azure", "vcenter", "storage", "virtual", "cluster", "backup", "recovery"]
         };
         
         var category = "Other";
@@ -32,14 +57,18 @@ CaseCategorizationEngine.prototype = {
         }
         
         current.category = category;
-        if (text.indexOf('outage') > -1 || text.indexOf('breach') > -1 || text.indexOf('critical') > -1 || text.indexOf('urgent') > -1) {
+        if (text.indexOf('outage') > -1 || text.indexOf('breach') > -1 || text.indexOf('critical') > -1 || text.indexOf('urgent') > -1 || text.indexOf('emergency') > -1) {
             current.priority = 1;
             current.impact = 1;
             current.urgency = 1;
-        } else if (maxCount > 2) {
+        } else if (maxCount > 2 || text.indexOf('important') > -1) {
             current.priority = 2;
+            current.impact = 2;
+            current.urgency = 2;
         } else {
             current.priority = 3;
+            current.impact = 3;
+            current.urgency = 3;
         }
     },
     type: 'CaseCategorizationEngine'
@@ -64,10 +93,14 @@ AgentMatchingUtil.prototype = {
         
         while (agents.next()) {
             var score = 0;
-            // 1. Skill Match (40%)
-            if (agents.title.toLowerCase().indexOf(caseGr.category.toLowerCase()) > -1) score += 40;
+            // 1. Skill Match (40%) - Check if user has skills matching the category
+            var skills = new GlideRecord('sys_user_has_skill');
+            skills.addQuery('user', agents.sys_id);
+            skills.addQuery('skill.name', 'CONTAINS', caseGr.category);
+            skills.query();
+            if (skills.hasNext()) score += 40;
             
-            // 2. Workload (30%)
+            // 2. Workload (30%) - Inverse of active case count
             var activeCases = new GlideAggregate('sn_customerservice_case');
             activeCases.addQuery('assigned_to', agents.sys_id);
             activeCases.addQuery('active', true);
@@ -77,11 +110,11 @@ AgentMatchingUtil.prototype = {
             if (activeCases.next()) count = activeCases.getAggregate('COUNT');
             score += Math.max(0, 30 - (count * 5));
             
-            // 3. Availability (20%)
-            if (agents.introduction != 'away') score += 20;
+            // 3. Availability (20%) - Check schedule or 'available' flag
+            if (agents.introduction != 'away' && agents.active) score += 20;
             
             // 4. Certification (10%)
-            if (agents.vip) score += 10;
+            if (agents.vip || agents.title.indexOf('Senior') > -1) score += 10;
             
             if (score > highestScore) {
                 highestScore = score;
@@ -95,7 +128,7 @@ AgentMatchingUtil.prototype = {
         ]]></script>
     </sys_script_include>
 
-    <!-- 2. COMPLIANCE LAYER: SLA and Audit -->
+    <!-- 3. COMPLIANCE LAYER: SLA and Audit -->
     <sys_script_include action="INSERT_OR_UPDATE">
         <name>SLACalculator</name>
         <script><![CDATA[
@@ -138,7 +171,7 @@ AuditLogger.prototype = {
         ]]></script>
     </sys_script_include>
 
-    <!-- 3. ESCALATION LAYER -->
+    <!-- 4. ESCALATION LAYER -->
     <sys_script_include action="INSERT_OR_UPDATE">
         <name>EscalationManager</name>
         <script><![CDATA[
@@ -162,6 +195,7 @@ EscalationManager.prototype = {
             else if (new SLACalculator().calculateRisk(cases)) this._escalate(cases, 'ESC-004');
             else if (cases.contact.vip && ageHours > 1) this._escalate(cases, 'ESC-005');
             else if (ageHours > 0.5 && !cases.assigned_to) this._escalate(cases, 'ESC-006');
+            else if (cases.short_description.toLowerCase().indexOf('escalate') > -1) this._escalate(cases, 'ESC-007');
         }
     },
     _escalate: function(caseGr, ruleId) {
@@ -176,57 +210,57 @@ EscalationManager.prototype = {
         ]]></script>
     </sys_script_include>
 
-    <!-- 4. COMMUNICATION LAYER: Notifications -->
+    <!-- 5. COMMUNICATION LAYER -->
     <sys_metadata action="INSERT_OR_UPDATE">
         <sys_class_name>sys_notification</sys_class_name>
-        <name>NOTIF-001: Case Created</name>
+        <name>NOTIF-001: Case Created Acknowledgement</name>
         <active>true</active>
         <collection>sn_customerservice_case</collection>
     </sys_metadata>
     <sys_metadata action="INSERT_OR_UPDATE">
         <sys_class_name>sys_notification</sys_class_name>
-        <name>NOTIF-002: Case Assigned</name>
+        <name>NOTIF-002: Agent Assignment Notification</name>
         <active>true</active>
         <collection>sn_customerservice_case</collection>
     </sys_metadata>
     <sys_metadata action="INSERT_OR_UPDATE">
         <sys_class_name>sys_notification</sys_class_name>
-        <name>NOTIF-003: Case Escalated</name>
+        <name>NOTIF-003: Escalation Alert</name>
         <active>true</active>
         <collection>sn_customerservice_case</collection>
     </sys_metadata>
     <sys_metadata action="INSERT_OR_UPDATE">
         <sys_class_name>sys_notification</sys_class_name>
-        <name>NOTIF-004: SLA Warning</name>
+        <name>NOTIF-004: SLA 80% Warning</name>
         <active>true</active>
         <collection>sn_customerservice_case</collection>
     </sys_metadata>
     <sys_metadata action="INSERT_OR_UPDATE">
         <sys_class_name>sys_notification</sys_class_name>
-        <name>NOTIF-005: SLA Breached</name>
+        <name>NOTIF-005: SLA Breach Notification</name>
         <active>true</active>
         <collection>sn_customerservice_case</collection>
     </sys_metadata>
     <sys_metadata action="INSERT_OR_UPDATE">
         <sys_class_name>sys_notification</sys_class_name>
-        <name>NOTIF-006: Case Resolved</name>
+        <name>NOTIF-006: Resolution Confirmation</name>
         <active>true</active>
         <collection>sn_customerservice_case</collection>
     </sys_metadata>
     <sys_metadata action="INSERT_OR_UPDATE">
         <sys_class_name>sys_notification</sys_class_name>
-        <name>NOTIF-007: Customer Update</name>
+        <name>NOTIF-007: Customer Feedback Requested</name>
         <active>true</active>
         <collection>sn_customerservice_case</collection>
     </sys_metadata>
     <sys_metadata action="INSERT_OR_UPDATE">
         <sys_class_name>sys_notification</sys_class_name>
-        <name>NOTIF-008: VIP Alert</name>
+        <name>NOTIF-008: VIP Priority Alert</name>
         <active>true</active>
         <collection>sn_customerservice_case</collection>
     </sys_metadata>
 
-    <!-- 5. AUTOMATION LAYER: Business Rules and Flows -->
+    <!-- 6. AUTOMATION LAYER -->
     <sys_script action="INSERT_OR_UPDATE">
         <name>CaseFlow AI - Auto Categorize and Assign</name>
         <collection>sn_customerservice_case</collection>
@@ -249,20 +283,34 @@ new EscalationManager().checkEscalations();
         ]]></script>
     </sysauto_script>
 
-    <!-- 6. TESTING LAYER: ATF Tests -->
+    <!-- 7. TESTING LAYER (ATF) -->
     <sys_metadata action="INSERT_OR_UPDATE">
         <sys_class_name>sys_atf_test</sys_class_name>
-        <name>TC-001: Auto Categorization Verification</name>
+        <name>ATF-001: Verification of AI Categorization</name>
         <active>true</active>
     </sys_metadata>
     <sys_metadata action="INSERT_OR_UPDATE">
         <sys_class_name>sys_atf_test</sys_class_name>
-        <name>TC-002: Agent Matching Score Logic</name>
+        <name>ATF-002: Verification of Agent Matching Logic</name>
         <active>true</active>
     </sys_metadata>
     <sys_metadata action="INSERT_OR_UPDATE">
         <sys_class_name>sys_atf_test</sys_class_name>
-        <name>TC-003: Escalation Rule Triggering</name>
+        <name>ATF-003: Verification of Escalation Triggers</name>
         <active>true</active>
+    </sys_metadata>
+
+    <!-- SLA DEFINITIONS WITH REGIONAL CALENDARS -->
+    <sys_metadata action="INSERT_OR_UPDATE">
+        <sys_class_name>contract_sla</sys_class_name>
+        <name>CaseFlow P1 - 4 Hour Resolution</name>
+        <duration>1970-01-01 04:00:00</duration>
+        <schedule>24x7</schedule>
+    </sys_metadata>
+    <sys_metadata action="INSERT_OR_UPDATE">
+        <sys_class_name>contract_sla</sys_class_name>
+        <name>CaseFlow P2 - 8 Hour Resolution</name>
+        <duration>1970-01-01 08:00:00</duration>
+        <schedule>8-5 weekdays</schedule>
     </sys_metadata>
 </unload>
