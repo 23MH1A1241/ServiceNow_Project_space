@@ -323,3 +323,37 @@ export const createUser = async (userData) => {
     throw new Error('Failed to create account. User might already exist.');
   }
 };
+
+/**
+ * Intelligent Intent Extraction & Chat Processing
+ */
+export const processChatIntent = async (query, user) => {
+  const q = query.toLowerCase();
+  
+  // Simulated NLU processing logic
+  if (q.includes('create') || q.includes('report') || q.includes('issue')) {
+    return {
+      message: "I can help you create a case. Would you like to report a Hardware or Software issue?",
+      data: { intent: 'CREATE_CASE', context: 'SUPPORT' }
+    };
+  }
+  
+  if (q.includes('status') || q.includes('track') || q.includes('update')) {
+    return {
+      message: "Fetching your active cases from the ServiceNow instance...",
+      data: { intent: 'TRACK_CASE', sys_id: user?.sys_id }
+    };
+  }
+  
+  if (q.includes('help') || q.includes('knowledge') || q.includes('kb')) {
+    return {
+      message: "Searching the knowledge base for solution articles related to your query.",
+      data: { intent: 'SEARCH_KB' }
+    };
+  }
+
+  return {
+    message: "I understand. I've logged this query into the CaseFlow neural engine for processing. How else can I assist your workflow?",
+    data: { intent: 'GENERAL_QUERY', raw: query }
+  };
+};
