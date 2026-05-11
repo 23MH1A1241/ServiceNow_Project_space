@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, Clock } from 'lucide-react';
+import { Bell, Clock, CheckCircle2 } from 'lucide-react';
 import { fetchNotifications } from '../api/serviceNow';
 
 const Notifications = () => {
@@ -8,52 +8,67 @@ const Notifications = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchNotifications();
-      setNotifications(data);
-      setLoading(false);
+      try {
+        const data = await fetchNotifications();
+        setNotifications(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
   }, []);
 
-  if (loading) return <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-samsung-blue mx-auto mt-20"></div>;
+  if (loading) return (
+    <div className="h-96 flex items-center justify-center">
+      <div className="w-10 h-10 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin"></div>
+    </div>
+  );
+
   return (
-    <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
-      <div className="flex justify-between items-end mb-8">
-        <div>
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Notifications</h1>
-          <p className="text-gray-500 mt-2 text-lg">Recent alerts and updates from CaseFlow AI.</p>
+    <div className="max-w-4xl mx-auto space-y-12 animate-fade-in font-outfit">
+      <div className="flex justify-between items-end">
+        <div className="space-y-1">
+          <div className="inline-flex items-center px-2 py-0.5 bg-blue-500/10 border border-blue-500/20 rounded-md text-[8px] font-black text-blue-400 uppercase tracking-widest">
+            Inbox
+          </div>
+          <h1 className="text-4xl font-black tracking-tighter text-gray-900">Notifications</h1>
         </div>
-        <button className="text-sm font-bold text-samsung-blue hover:bg-blue-50 px-5 py-2.5 rounded-xl transition-colors border border-transparent hover:border-blue-100 shadow-sm">
-          Mark all as read
+        <button className="flex items-center space-x-2 text-[10px] font-black text-gray-400 hover:text-blue-500 uppercase tracking-widest transition-colors">
+          <CheckCircle2 className="w-4 h-4" />
+          <span>Clear All</span>
         </button>
       </div>
 
-      <div className="glass-panel overflow-hidden border border-white">
-        <div className="divide-y divide-gray-100/80">
-          {notifications.length === 0 ? (
-             <div className="p-8 text-center text-gray-500 font-medium">No recent notifications.</div>
-          ) : notifications.map((n, i) => (
-            <div key={i} className={`p-6 flex items-start space-x-5 hover:bg-white/60 transition-colors cursor-pointer ${i < 3 ? 'bg-blue-50/40' : ''}`}>
-              <div className={`p-3 rounded-full flex-shrink-0 ${i < 3 ? 'bg-blue-100 text-samsung-blue shadow-inner' : 'bg-gray-100 text-gray-400'}`}>
-                <Bell className="w-6 h-6" />
-              </div>
-              <div className="flex-1">
-                <div className="flex justify-between items-start mb-1.5">
-                  <h3 className={`text-base font-bold ${i < 3 ? 'text-gray-900' : 'text-gray-600'}`}>
-                    {n.element || 'System Alert'}
-                  </h3>
-                  <span className="text-xs font-bold text-gray-400 flex items-center bg-white px-2 py-1 rounded-md shadow-sm border border-gray-50">
-                    <Clock className="w-3.5 h-3.5 mr-1.5" /> {new Date(n.sys_created_on).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                  </span>
+      <div className="space-y-4">
+        {notifications.length === 0 ? (
+           <div className="py-20 text-center glass-panel border-dashed">
+              <Bell className="h-10 w-10 text-gray-200 mx-auto mb-4" />
+              <p className="text-lg font-black text-gray-400 tracking-tight">Nothing new here</p>
+           </div>
+        ) : notifications.map((n, i) => (
+          <div key={i} className="glass-panel p-6 flex items-center space-x-6 group hover:border-blue-500/20 transition-all cursor-pointer relative overflow-hidden">
+             <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-colors ${i < 3 ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'bg-gray-50 text-gray-400 group-hover:bg-blue-50 group-hover:text-blue-500'}`}>
+                <Bell className="w-5 h-5" />
+             </div>
+             <div className="flex-1">
+                <div className="flex items-center space-x-2 mb-1">
+                   <h3 className="text-sm font-black text-gray-900">{n.element || 'System Alert'}</h3>
+                   <span className="text-[10px] font-bold text-gray-300">•</span>
+                   <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                      {new Date(n.sys_created_on).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                   </span>
                 </div>
-                <p className="text-sm text-gray-500 font-medium leading-relaxed">
-                  {n.value || 'The system has logged a recent change for this record.'}
+                <p className="text-[12px] text-gray-400 font-medium line-clamp-1 group-hover:text-gray-600 transition-colors">
+                   {n.value || 'Recent system event processed.'}
                 </p>
-              </div>
-              {i < 3 && <div className="w-2.5 h-2.5 rounded-full samsung-gradient shadow-sm mt-2 flex-shrink-0"></div>}
-            </div>
-          ))}
-        </div>
+             </div>
+             {i < 3 && (
+                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
+             )}
+          </div>
+        ))}
       </div>
     </div>
   );
