@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Send, User, Sparkles, MessageSquare, Loader2, Zap, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { processChatIntent, createCase } from '../api/serviceNow';
-import { getAIResolution } from '../api/gemini';
+import { getAIResolution } from '../api/ai';
 
 const Chatbot = () => {
   const { user } = useAuth();

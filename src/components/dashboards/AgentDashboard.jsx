@@ -5,7 +5,7 @@ import {
   Terminal
 } from 'lucide-react';
 import { fetchAgentMetrics } from '../../api/serviceNow';
-import { getAIResolution } from '../../api/gemini';
+import { getAIResolution } from '../../api/ai';
 import { PieChart, Pie, Cell, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
 
 const AgentDashboard = ({ user }) => {
