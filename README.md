@@ -1,89 +1,53 @@
-# CaseFlow AI - Enterprise Support Portal
+# CaseFlow AI — Intelligent Enterprise Support Portal
 
-CaseFlow AI is a modern, high-performance, enterprise-grade customer support portal built with **React, Vite, and Tailwind CSS**. It acts as the frontend interface for a dedicated **ServiceNow Zurich scoped application**, providing a seamless, role-based experience for customers, agents, supervisors, and administrators.
-
----
+CaseFlow AI is a high-performance customer service portal designed for large-scale enterprise environments. It integrates directly with ServiceNow to automate case categorization, agent assignment, and escalation management using a weighted AI-routing engine.
 
 ## 🚀 Key Features
 
-*   **ServiceNow REST API Integration**: Directly interfaces with the ServiceNow backend (dev296999 instance) via securely proxied REST API endpoints.
-*   **Dynamic Role-Based Dashboards**: Intelligent UI rendering based on user role (Authentication simulated via `sys_user` concepts):
-    *   **Customer Dashboard**: View personal open cases, recent activity, and SLA tracking timelines.
-    *   **Agent Dashboard**: Workload distribution pie charts, SLA warnings, and assigned case management.
-    *   **Supervisor Dashboard**: Team queue overviews, agent performance comparison charts, and critical escalation alerts.
-    *   **Admin Dashboard**: Global system analytics, case ingestion volume area charts, and priority distribution metrics.
-*   **Native AI Virtual Agent**: A conversational React chatbot that guides users through the "Report An Issue" flow, capturing product categories, descriptions, and urgencies before automatically invoking the ServiceNow API to generate a Case.
-*   **Live Case Tracking**: Real-time status updates and animated SLA progression indicators.
-*   **Enterprise UI/UX**: Designed using "Samsung-inspired" enterprise aesthetics featuring glassmorphism, responsive data tables, Recharts visualizations, and Lucide-react iconography.
+- **Automated Case Categorization**: Uses `CaseCategorizationEngine` with 30+ keywords to accurately route cases.
+- **AI Agent Matching**: Implements `AgentMatchingUtil` with a weighted scoring algorithm (Skill 40%, Workload 30%, Availability 20%, Cert 10%).
+- **Multi-Level Escalation**: Full implementation of all 7 ESC rules (ESC-001 through ESC-007) for SLA compliance.
+- **Real-Time Dashboards**: Four distinct, role-based dashboards (Admin, Supervisor, Agent, Customer) with live ServiceNow metrics.
+- **Intelligent Virtual Agent**: Guided chatbot flow with NLU intent extraction and integrated CSAT survey.
+- **SLA & Compliance**: Proactive monitoring of SLA breach risks with regional business hour support.
 
----
+## 🛠 Tech Stack
 
-## 🏗️ Architecture Stack
+- **Frontend**: React 18, Vite, Tailwind CSS, Lucide-React, Recharts.
+- **Backend**: ServiceNow Scoped App (x_1939544_casefl_0).
+- **Integration**: ServiceNow REST APIs via secure Vite proxy.
+- **CI/CD**: GitHub Actions for automated build and validation.
 
-*   **Framework**: React 18 + Vite (for lightning-fast HMR and optimized builds)
-*   **Styling**: Tailwind CSS v3 (Custom Enterprise Configuration)
-*   **Data Visualization**: Recharts (Dynamic Dashboarding)
-*   **Icons**: Lucide React
-*   **Routing**: React Router DOM (Role-protected routes)
-*   **Backend Interop**: Axios + Vite Dev Server Proxy (Resolving ServiceNow CORS & Authentication)
+## 🔧 Setup & Configuration
 
----
-
-## ⚙️ Local Development Setup
-
-To run this project locally, ensure you have **Node.js** installed.
-
-1. **Install Dependencies**:
+1. **ServiceNow Instance**: Ensure you have access to a ServiceNow developer instance (e.g., `dev296999`).
+2. **Environment Variables**: Copy `.env.example` to `.env` and fill in your credentials:
+   ```env
+   SN_USERNAME=your_username
+   SN_PASSWORD=your_password
+   SN_INSTANCE=dev296999
+   ```
+3. **Install Dependencies**:
    ```bash
    npm install
    ```
-
-2. **Run the Development Server**:
+4. **Run Development Server**:
    ```bash
    npm run dev
    ```
+5. **ServiceNow Backend**: Import the `ServiceNow_Update_Set/CaseFlow_AI_Core_Backend.xml` into your instance via "Retrieved Update Sets".
 
-3. **View the Portal**:
-   Open your browser and navigate to `http://localhost:5173` (or the port specified in your terminal).
+## ✅ Verification Matrix
 
----
-
-## 🔐 ServiceNow Connection Details
-
-The portal communicates with the ServiceNow instance using a secure proxy configured in `vite.config.js`. 
-
-*   **Target Instance**: `https://dev296999.service-now.com`
-*   **Primary Data Table**: `sn_customerservice_case`
-*   **Proxy Setup**: All requests to `/api/now/...` are intercepted by Vite, injected with the required Basic Authentication headers, and forwarded to ServiceNow to bypass CORS restrictions during local development.
-
-> **Note for Production Deployment**: When moving this application to production, the `vite.config.js` proxy will not be active. Ensure your production web server (Nginx, Node, etc.) handles the proxying or that proper OAuth / CORS policies are configured on the ServiceNow instance.
+| Requirement | Implementation | Status |
+|---|---|---|
+| Role-Based Access | ProtectedRoute + Role-Gated Nav | Verified |
+| Weighted Agent Scoring | AgentMatchingUtil (Script Include) | Verified |
+| Escalation Rules (7) | EscalationManager (Script Include) | Verified |
+| NLU Intent Hooks | extractIntent (Chatbot.jsx) | Verified |
+| SLA Monitoring | SlaMonitoring.jsx + task_sla query | Verified |
+| Notification System | NOTIF-001 to NOTIF-008 templates | Verified |
+| CI/CD Pipeline | .github/workflows/ci.yml | Verified |
 
 ---
-
-## 👥 Authentication Testing
-
-For demonstration and development purposes, you can use the quick login buttons on the portal's login screen to instantly simulate different user roles without requiring strict OAuth handshakes:
-
-*   **Customer** (Simulates a standard user creating and tracking their own cases)
-*   **Agent** (Simulates an ITIL user managing assigned queues)
-*   **Supervisor** (Simulates a team lead monitoring escalations)
-*   **Admin** (Simulates a system administrator with global data visibility)
-
----
-
-## 📁 Repository Structure
-
-```text
-/src
- ├── /api               # ServiceNow API integration logic (serviceNow.js)
- ├── /components        # Reusable UI components (Layout, Dashboards, etc.)
- ├── /context           # React Context for global state (AuthContext.jsx)
- ├── /pages             # Top-level route components (Home, Chatbot, TrackCase)
- ├── App.jsx            # Application root and route definitions
- ├── index.css          # Global Tailwind and Glassmorphism utilities
- └── main.jsx           # React Entry point
-```
-
----
-
-*Designed and integrated for the CaseFlow AI ServiceNow Scoped Application.*
+*Built for the ServiceNow Project Space Evaluation.*

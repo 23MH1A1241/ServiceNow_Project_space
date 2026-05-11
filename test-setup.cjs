@@ -1,7 +1,25 @@
+/**
+ * test-setup.cjs
+ * Creates test users in the ServiceNow dev instance.
+ * Credentials are read from the .env file via dotenv — never hardcoded.
+ *
+ * Usage: node test-setup.cjs
+ * Requires: SN_USERNAME and SN_PASSWORD set in .env
+ */
+require('dotenv').config();
 const https = require('https');
 
-const instance = 'dev296999';
-const auth = 'Basic ' + Buffer.from('admin:CC3aYtxK$2l*').toString('base64');
+const instance = process.env.SN_INSTANCE || 'dev296999';
+const username = process.env.SN_USERNAME;
+const password = process.env.SN_PASSWORD;
+
+if (!username || !password) {
+  console.error('ERROR: SN_USERNAME and SN_PASSWORD must be set in your .env file.');
+  console.error('Copy .env.example to .env and fill in your credentials.');
+  process.exit(1);
+}
+
+const auth = 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64');
 
 const usersToCreate = [
   { username: 'vinay', name: 'Vinay User', email: 'vinay@example.com' },
@@ -16,7 +34,7 @@ function createUser(userData) {
     last_name: userData.name.split(' ').slice(1).join(' ') || 'User',
     email: userData.email,
     active: true,
-    user_password: userData.username // Setting password same as username as per app logic
+    user_password: userData.username
   });
 
   const options = {
@@ -27,7 +45,7 @@ function createUser(userData) {
       'Authorization': auth,
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Content-Length': data.length
+      'Content-Length': Buffer.byteLength(data)
     }
   };
 
@@ -38,10 +56,10 @@ function createUser(userData) {
       console.log(`User ${userData.username}: Status ${res.statusCode}`);
       if (res.statusCode !== 201) {
         try {
-            const parsed = JSON.parse(body);
-            console.log(`Error: ${parsed.error ? parsed.error.message : body}`);
-        } catch(e) {
-            console.log(`Response: ${body}`);
+          const parsed = JSON.parse(body);
+          console.log(`Error: ${parsed.error ? parsed.error.message : body}`);
+        } catch (e) {
+          console.log(`Response: ${body}`);
         }
       }
     });
@@ -55,5 +73,5 @@ function createUser(userData) {
   req.end();
 }
 
-console.log('Starting user creation on dev296999...');
+console.log(`Starting user creation on ${instance}...`);
 usersToCreate.forEach(createUser);

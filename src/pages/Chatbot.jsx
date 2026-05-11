@@ -19,6 +19,15 @@ const Chatbot = () => {
     urgency: '3',
     priority: '3'
   });
+  const [csatRating, setCsatRating] = useState(0);
+
+  const extractIntent = (text) => {
+    const t = text.toLowerCase();
+    if (t.includes('create') || t.includes('new') || t.includes('problem')) return 'create_case';
+    if (t.includes('status') || t.includes('track') || t.includes('where')) return 'track_case';
+    if (t.includes('help') || t.includes('how')) return 'get_help';
+    return 'unknown';
+  };
 
   const messagesEndRef = useRef(null);
 
@@ -95,7 +104,7 @@ const Chatbot = () => {
           try {
             const newCase = await createCase(finalCaseData);
             addBotMessage(`Success! Your case has been logged and assigned. The Case Number is: **${newCase.number}**.`);
-            addBotMessage('Our support team will review it shortly. Is there anything else you need help with? (You can track this case on the Track Case page).');
+            addBotMessage('Our support team will review it shortly. How would you rate your experience with me today?');
             setStep(5); // Flow complete
           } catch (apiError) {
             console.error('Case creation failed via chatbot:', apiError);
@@ -205,6 +214,24 @@ const Chatbot = () => {
                       </button>
                     )
                   })}
+                </div>
+              )}
+
+              {/* CSAT Rating Widget */}
+              {step === 5 && msg.text.includes('rate your experience') && (
+                <div className="ml-10 flex space-x-2 mt-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => setCsatRating(star)}
+                      className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all ${
+                        csatRating >= star ? 'bg-yellow-400 border-yellow-500 text-white' : 'bg-white border-gray-200 text-gray-400'
+                      }`}
+                    >
+                      ★
+                    </button>
+                  ))}
+                  {csatRating > 0 && <span className="text-sm font-bold text-green-600 flex items-center">Thank you!</span>}
                 </div>
               )}
             </div>

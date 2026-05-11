@@ -10,6 +10,8 @@ import Dashboard from './pages/Dashboard';
 import Chatbot from './pages/Chatbot';
 import KnowledgeBase from './pages/KnowledgeBase';
 import Notifications from './pages/Notifications';
+import SlaMonitoring from './pages/SlaMonitoring';
+import Escalations from './pages/Escalations';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -47,6 +49,8 @@ const App = () => {
           <Route path="chatbot" element={<Chatbot />} />
           <Route path="knowledge" element={<KnowledgeBase />} />
           <Route path="notifications" element={<Notifications />} />
+          <Route path="sla-monitoring" element={<SlaMonitoring />} />
+          <Route path="escalations" element={<Escalations />} />
         </Route>
       </Routes>
     </BrowserRouter>

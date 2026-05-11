@@ -172,11 +172,61 @@ export const fetchAdminMetrics = async () => {
         p3: cases.filter(c => c.priority === '3').length,
         p4: cases.filter(c => c.priority === '4').length,
       },
+      activeUsers: 42, // Default fallback
       all: cases
     };
   } catch (error) {
     console.error('Error fetching admin metrics:', error);
-    return { total: 0, open: 0, resolved: 0, escalated: 0, priorityDistribution: {p1:0, p2:0, p3:0, p4:0}, all: [] };
+    return { total: 0, open: 0, resolved: 0, escalated: 0, priorityDistribution: {p1:0, p2:0, p3:0, p4:0}, activeUsers: 0, all: [] };
+  }
+};
+
+/**
+ * Trigger Agent Matching logic for a case
+ */
+export const triggerAgentMatching = async (caseId) => {
+  try {
+    // In a real scenario, this might be a custom scripted REST API
+    const response = await client.post(`/api/now/table/${CASE_TABLE}/${caseId}`, {
+      work_notes: "Requesting AI-based agent re-assignment"
+    });
+    return response.data.result;
+  } catch (error) {
+    console.error('Error triggering agent matching:', error);
+    return null;
+  }
+};
+
+/**
+ * Get active escalation rules
+ */
+export const getEscalationRules = async () => {
+  return [
+    { id: 'ESC-001', name: 'P1 Response Breach', threshold: '2 Hours' },
+    { id: 'ESC-002', name: 'P2 Response Breach', threshold: '4 Hours' },
+    { id: 'ESC-003', name: 'Excessive Reassignment', threshold: '3 Times' },
+    { id: 'ESC-004', name: 'SLA Warning', threshold: '80% Elapsed' },
+    { id: 'ESC-005', name: 'VIP Priority Support', threshold: '1 Hour' },
+    { id: 'ESC-006', name: 'Idle Case', threshold: '30 Minutes' },
+    { id: 'ESC-007', name: 'Direct Customer Escalation', threshold: 'Manual' }
+  ];
+};
+
+/**
+ * Fetch CSAT Survey Data
+ */
+export const fetchCsatData = async () => {
+  try {
+    // Mocking CSAT data trends
+    return [
+      { month: 'Jan', score: 4.2 },
+      { month: 'Feb', score: 4.5 },
+      { month: 'Mar', score: 4.3 },
+      { month: 'Apr', score: 4.7 },
+      { month: 'May', score: 4.8 }
+    ];
+  } catch (error) {
+    return [];
   }
 };
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<unload unload_date="2026-05-10 15:00:00">
+<unload unload_date="2026-05-11 11:30:00">
+    <!-- Script Includes -->
     <sys_script_include action="INSERT_OR_UPDATE">
         <name>CaseCategorizationEngine</name>
         <script><![CDATA[
@@ -7,10 +8,37 @@ var CaseCategorizationEngine = Class.create();
 CaseCategorizationEngine.prototype = {
     initialize: function() {},
     categorize: function(current) {
-        // Keyword analysis logic
-        var desc = current.short_description.toLowerCase();
-        if (desc.indexOf('server') > -1 || desc.indexOf('outage') > -1) {
+        var text = (current.short_description + " " + current.description).toLowerCase();
+        var keywords = {
+            "hardware": ["laptop", "monitor", "keyboard", "mouse", "printer", "battery", "hardware", "screen"],
+            "network": ["wifi", "internet", "vpn", "connection", "network", "router", "dns", "ip"],
+            "software": ["office", "outlook", "excel", "windows", "software", "install", "update", "drivers"],
+            "security": ["password", "access", "lockout", "mfa", "permission", "unauthorized", "phishing", "breach"],
+            "account": ["login", "profile", "account", "ad", "username", "sso", "portal"],
+            "infrastructure": ["server", "outage", "database", "cloud", "aws", "azure", "vcenter", "storage"]
+        };
+        
+        var category = "Other";
+        var maxCount = 0;
+        for (var cat in keywords) {
+            var count = 0;
+            keywords[cat].forEach(function(word) {
+                if (text.indexOf(word) > -1) count++;
+            });
+            if (count > maxCount) {
+                maxCount = count;
+                category = cat.charAt(0).toUpperCase() + cat.slice(1);
+            }
+        }
+        
+        current.category = category;
+        // P1 for outages or breaches
+        if (text.indexOf('outage') > -1 || text.indexOf('breach') > -1 || text.indexOf('critical') > -1) {
             current.priority = 1;
+            current.impact = 1;
+            current.urgency = 1;
+        } else if (maxCount > 2) {
+            current.priority = 2;
         } else {
             current.priority = 3;
         }
@@ -19,6 +47,7 @@ CaseCategorizationEngine.prototype = {
 };
         ]]></script>
     </sys_script_include>
+
     <sys_script_include action="INSERT_OR_UPDATE">
         <name>AgentMatchingUtil</name>
         <script><![CDATA[
@@ -26,15 +55,47 @@ var AgentMatchingUtil = Class.create();
 AgentMatchingUtil.prototype = {
     initialize: function() {},
     findBestAgent: function(caseGr) {
-        // Weighted scoring algorithm (Skill 40%, Workload 30%, Availability 20%, Certification 10%)
+        var agents = new GlideRecord('sys_user');
+        agents.addQuery('active', true);
+        agents.addEncodedQuery('roles=sn_customerservice.agent');
+        agents.query();
+        
         var bestAgent = null;
-        var highestScore = 0;
+        var highestScore = -1;
+        
+        while (agents.next()) {
+            var score = 0;
+            // 1. Skill Match (40%) - Simplified for this implementation
+            if (agents.title.toLowerCase().indexOf(caseGr.category.toLowerCase()) > -1) score += 40;
+            
+            // 2. Workload (30%)
+            var activeCases = new GlideAggregate('sn_customerservice_case');
+            activeCases.addQuery('assigned_to', agents.sys_id);
+            activeCases.addQuery('active', true);
+            activeCases.addAggregate('COUNT');
+            activeCases.query();
+            var count = 0;
+            if (activeCases.next()) count = activeCases.getAggregate('COUNT');
+            score += Math.max(0, 30 - (count * 5));
+            
+            // 3. Availability (20%)
+            if (agents.introduction != 'away') score += 20; // Using introduction as dummy availability
+            
+            // 4. Certification (10%)
+            if (agents.vip) score += 10; // VIP users treated as 'certified' for demo
+            
+            if (score > highestScore) {
+                highestScore = score;
+                bestAgent = agents.getUniqueValue();
+            }
+        }
         return bestAgent;
     },
     type: 'AgentMatchingUtil'
 };
         ]]></script>
     </sys_script_include>
+
     <sys_script_include action="INSERT_OR_UPDATE">
         <name>EscalationManager</name>
         <script><![CDATA[
@@ -42,11 +103,69 @@ var EscalationManager = Class.create();
 EscalationManager.prototype = {
     initialize: function() {},
     checkEscalations: function() {
-        // Evaluates all 7 ESC rules: ESC-001 through ESC-007
+        var cases = new GlideRecord('sn_customerservice_case');
+        cases.addQuery('active', true);
+        cases.addQuery('state', '!=', 3); // Not Resolved
+        cases.query();
+        
+        while (cases.next()) {
+            var now = new GlideDateTime();
+            var created = new GlideDateTime(cases.sys_created_on);
+            var ageHours = (now.getNumericValue() - created.getNumericValue()) / 3600000;
+            
+            // ESC-001: P1 > 2h
+            if (cases.priority == 1 && ageHours > 2) this._escalate(cases, 'ESC-001');
+            // ESC-002: P2 > 4h
+            else if (cases.priority == 2 && ageHours > 4) this._escalate(cases, 'ESC-002');
+            // ESC-003: Reassigned > 3 times
+            else if (cases.reassignment_count > 3) this._escalate(cases, 'ESC-003');
+            // ESC-005: VIP > 1h
+            else if (cases.contact.vip && ageHours > 1) this._escalate(cases, 'ESC-005');
+        }
+    },
+    _escalate: function(caseGr, ruleId) {
+        caseGr.escalation = 1; // Moderate
+        if (ruleId == 'ESC-001') caseGr.escalation = 2; // High
+        caseGr.work_notes = "Auto-escalated by rule: " + ruleId;
+        caseGr.update();
     },
     type: 'EscalationManager'
 };
         ]]></script>
     </sys_script_include>
-    <!-- Placeholder for Flow Designer workflows, SLA Definitions, and Notification templates -->
+
+    <!-- SLACalculator and AuditLogger would go here in a full XML -->
+    
+    <!-- Business Rules -->
+    <sys_script action="INSERT_OR_UPDATE">
+        <name>CaseFlow AI - Auto Categorize and Assign</name>
+        <collection>sn_customerservice_case</collection>
+        <when>before</when>
+        <insert>true</insert>
+        <script><![CDATA[
+(function executeRule(current, previous /*null when async*/) {
+    new CaseCategorizationEngine().categorize(current);
+    var agent = new AgentMatchingUtil().findBestAgent(current);
+    if (agent) current.assigned_to = agent;
+})(current, previous);
+        ]]></script>
+    </sys_script>
+
+    <!-- Scheduled Jobs -->
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <name>ESC_DailyEscalationCheck</name>
+        <interval>00:30:00</interval>
+        <script><![CDATA[
+new EscalationManager().checkEscalations();
+        ]]></script>
+    </sysauto_script>
+
+    <!-- SLA Definitions, Notifications, ATF would be included in sys_metadata records -->
+    <!-- Simplified placeholders for the XML representation -->
+    <sys_metadata action="INSERT_OR_UPDATE">
+        <sys_class_name>dl_definition</sys_class_name>
+        <name>SLA-P1-Resolve</name>
+        <active>true</active>
+        <!-- Attributes omitted for brevity -->
+    </sys_metadata>
 </unload>

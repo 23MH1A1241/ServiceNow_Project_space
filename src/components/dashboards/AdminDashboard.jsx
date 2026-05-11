@@ -46,7 +46,7 @@ const AdminDashboard = () => {
           { title: 'Open', value: metrics.open, icon: Activity, color: 'text-blue-600' },
           { title: 'Resolved', value: metrics.resolved, icon: Zap, color: 'text-emerald-600' },
           { title: 'Escalated', value: metrics.escalated, icon: Database, color: 'text-orange-600' },
-          { title: 'Active Users', value: '42', icon: Users, color: 'text-purple-600' }
+          { title: 'Active Users', value: metrics.activeUsers || '42', icon: Users, color: 'text-purple-600' }
         ].map((stat, idx) => {
           const Icon = stat.icon;
           return (

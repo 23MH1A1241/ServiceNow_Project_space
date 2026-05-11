@@ -33,7 +33,7 @@ const Escalations = () => {
                 <th className="pb-4 font-semibold text-gray-500 text-sm uppercase tracking-wider">Case Number</th>
                 <th className="pb-4 font-semibold text-gray-500 text-sm uppercase tracking-wider">Priority</th>
                 <th className="pb-4 font-semibold text-gray-500 text-sm uppercase tracking-wider">Assigned To</th>
-                <th className="pb-4 font-semibold text-gray-500 text-sm uppercase tracking-wider">Escalation Reason</th>
+                <th className="pb-4 font-semibold text-gray-500 text-sm uppercase tracking-wider">Escalation Rule</th>
                 <th className="pb-4 font-semibold text-gray-500 text-sm uppercase tracking-wider text-right">Action</th>
               </tr>
             </thead>
@@ -61,7 +61,10 @@ const Escalations = () => {
                     </div>
                   </td>
                   <td className="py-4">
-                    <span className="text-sm text-gray-600 truncate max-w-[200px] block">{c.short_description}</span>
+                    <span className="text-sm font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded border border-orange-100">
+                      {c.priority === '1' ? 'ESC-001' : (c.priority === '2' ? 'ESC-002' : 'ESC-004')}
+                    </span>
+                    <span className="text-xs text-gray-500 block mt-1 truncate max-w-[150px]">{c.short_description}</span>
                   </td>
                   <td className="py-4 text-right">
                     <button className="text-[#1428A0] hover:bg-blue-50 px-3 py-1.5 rounded-lg text-sm font-semibold inline-flex items-center space-x-1 transition-colors">

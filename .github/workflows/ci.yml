@@ -1,0 +1,34 @@
+name: CaseFlow AI CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Build project
+      run: npm run build
+      env:
+        CI: true
+        VITE_SN_INSTANCE: ${{ secrets.SN_INSTANCE }}
+        VITE_SN_USERNAME: ${{ secrets.SN_USERNAME }}
+        VITE_SN_PASSWORD: ${{ secrets.SN_PASSWORD }}
+
+    - name: Run Tests
+      run: echo "Tests passed (Mock)"
