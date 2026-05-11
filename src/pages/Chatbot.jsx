@@ -111,17 +111,6 @@ const Chatbot = () => {
                          </button>
                       </div>
                    )}
-                   {m.data && (
-                      <div className="p-4 bg-[#020617] text-white rounded-2xl border border-white/5 shadow-2xl animate-fade-in">
-                         <div className="flex items-center space-x-2 mb-3">
-                            <Zap className="w-3 h-3 text-blue-400" />
-                            <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Real-time Data</span>
-                         </div>
-                         <pre className="text-[10px] font-mono text-blue-300 overflow-x-auto">
-                            {JSON.stringify(m.data, null, 2)}
-                         </pre>
-                      </div>
-                   )}
                 </div>
               </div>
             </div>

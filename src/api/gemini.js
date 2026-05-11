@@ -1,13 +1,19 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(API_KEY);
-
 /**
  * Gets a resolution or guidance from Gemini AI based on the user's issue
  */
 export const getAIResolution = async (query, role = 'customer', context = {}) => {
   try {
+    const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+    
+    if (!API_KEY) {
+      console.error("Gemini API Key is missing in environment variables.");
+      return "Neural Engine configuration error. Missing API Access Key.";
+    }
+
+    const genAI = new GoogleGenerativeAI(API_KEY);
+    // Using gemini-flash-latest as it is a common stable alias
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     let prompt = "";
@@ -28,6 +34,7 @@ export const getAIResolution = async (query, role = 'customer', context = {}) =>
     return response.text();
   } catch (error) {
     console.error("Gemini AI Error:", error);
-    return "I'm having trouble connecting to my neural processing unit. Please try again in a moment.";
+    // Returning actual error message to debug
+    return `Neural Connection Error: ${error.message || 'Unknown network error'}. Please verify API access.`;
   }
 };
