@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Send, User, Sparkles, MessageSquare, Loader2, Zap } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { processChatIntent } from '../api/serviceNow';
+import { getAIResolution } from '../api/gemini';
 
 const Chatbot = () => {
   const { user } = useAuth();
@@ -26,8 +27,17 @@ const Chatbot = () => {
     setIsTyping(true);
 
     try {
-      const response = await processChatIntent(userMessage, user);
-      setMessages(prev => [...prev, { role: 'bot', content: response.message, data: response.data }]);
+      // First, process intent via ServiceNow (simulated)
+      const intentResponse = await processChatIntent(userMessage, user);
+      
+      // Then, get an actual AI resolution from Gemini
+      const aiResolution = await getAIResolution(userMessage, user?.role, { intent: intentResponse.data?.intent });
+      
+      setMessages(prev => [...prev, { 
+        role: 'bot', 
+        content: aiResolution, 
+        data: intentResponse.data 
+      }]);
     } catch (err) {
       setMessages(prev => [...prev, { role: 'bot', content: "Interface error. Connection to Neural Engine lost." }]);
     } finally {
