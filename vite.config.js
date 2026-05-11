@@ -51,7 +51,13 @@ export default defineConfig(({ mode }) => {
       '/styles': { target: 'https://dev296999.service-now.com', changeOrigin: true, secure: false },
       '/scripts': { target: 'https://dev296999.service-now.com', changeOrigin: true, secure: false },
       '/sys_attachment.do': { target: 'https://dev296999.service-now.com', changeOrigin: true, secure: false },
-      '/amb': { target: 'https://dev296999.service-now.com', changeOrigin: true, secure: false, ws: true }
+      '/amb': { target: 'https://dev296999.service-now.com', changeOrigin: true, secure: false, ws: true },
+      '/xai-api': {
+        target: 'https://api.x.ai',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/xai-api/, ''),
+        secure: true
+      }
     }
   }
   }

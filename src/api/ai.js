@@ -20,7 +20,7 @@ export const getAIResolution = async (query, role = 'customer', context = {}) =>
          Mention you are powered by xAI.`;
 
     const response = await axios.post(
-      'https://api.x.ai/v1/chat/completions',
+      '/xai-api/v1/chat/completions',
       {
         model: "grok-beta",
         messages: [
@@ -41,7 +41,7 @@ export const getAIResolution = async (query, role = 'customer', context = {}) =>
   } catch (error) {
     console.error("xAI Error:", error.response?.data || error.message);
     
-    // Fallback to Neural Core simulation if API fails (e.g. quota/invalid key)
+    // Fallback to Neural Core simulation if API fails (e.g. quota/invalid key/CORS)
     return getNeuralCoreFallback(query);
   }
 };
