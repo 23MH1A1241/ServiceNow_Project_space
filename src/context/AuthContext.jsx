@@ -10,7 +10,16 @@ export const AuthProvider = ({ children }) => {
       if (!savedUser) return null;
       
       // Basic obfuscation to avoid plaintext PII in localStorage
-      const decoded = JSON.parse(atob(savedUser));
+      let decodedString;
+      try {
+        decodedString = atob(savedUser);
+      } catch (e) {
+        // Handle legacy plaintext session
+        localStorage.removeItem('sn_user_session');
+        return null;
+      }
+      
+      const decoded = JSON.parse(decodedString);
       
       // Session expiry check (8 hours)
       const now = new Date().getTime();
