@@ -1,3 +1,4 @@
+/* global process */
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { Buffer } from 'node:buffer';
@@ -12,7 +13,7 @@ export default defineConfig(({ mode }) => {
     port: 5173,
     proxy: {
       '/api/now': {
-        target: 'https://dev296999.service-now.com',
+        target: env.SN_INSTANCE_URL,
         changeOrigin: true,
         secure: false,
         configure: (proxy) => {
@@ -27,7 +28,7 @@ export default defineConfig(({ mode }) => {
         }
       },
       '/$sn-va-web-client-app.do': {
-        target: 'https://dev296999.service-now.com',
+        target: env.SN_INSTANCE_URL,
         changeOrigin: true,
         secure: false,
         configure: (proxy) => {
@@ -38,7 +39,7 @@ export default defineConfig(({ mode }) => {
         }
       },
       '/api/sn_va_web_client': {
-        target: 'https://dev296999.service-now.com',
+        target: env.SN_INSTANCE_URL,
         changeOrigin: true,
         secure: false,
         configure: (proxy) => {
@@ -48,10 +49,10 @@ export default defineConfig(({ mode }) => {
           });
         }
       },
-      '/styles': { target: 'https://dev296999.service-now.com', changeOrigin: true, secure: false },
-      '/scripts': { target: 'https://dev296999.service-now.com', changeOrigin: true, secure: false },
-      '/sys_attachment.do': { target: 'https://dev296999.service-now.com', changeOrigin: true, secure: false },
-      '/amb': { target: 'https://dev296999.service-now.com', changeOrigin: true, secure: false, ws: true },
+      '/styles': { target: env.SN_INSTANCE_URL, changeOrigin: true, secure: false },
+      '/scripts': { target: env.SN_INSTANCE_URL, changeOrigin: true, secure: false },
+      '/sys_attachment.do': { target: env.SN_INSTANCE_URL, changeOrigin: true, secure: false },
+      '/amb': { target: env.SN_INSTANCE_URL, changeOrigin: true, secure: false, ws: true },
       '/xai-api': {
         target: 'https://api.x.ai',
         changeOrigin: true,

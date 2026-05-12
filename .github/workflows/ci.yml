@@ -31,4 +31,4 @@ jobs:
         VITE_SN_PASSWORD: ${{ secrets.SN_PASSWORD }}
 
     - name: Run Tests
-      run: echo "Tests passed (Mock)"
+      run: npm test

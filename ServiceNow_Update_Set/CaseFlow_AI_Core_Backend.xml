@@ -228,31 +228,42 @@ EscalationManager.prototype = {
         <active>true</active>
         <collection>sn_customerservice_case</collection>
         <subject>URGENT: Case ${number} Escalated</subject>
+        <message_html><![CDATA[<p>Case <b>${number}</b> has been escalated due to priority or SLA risks. A supervisor has been notified.</p>]]></message_html>
     </sys_notification>
     <sys_notification action="INSERT_OR_UPDATE">
         <name>NOTIF-004: SLA Warning (80%)</name>
         <active>true</active>
         <collection>sn_customerservice_case</collection>
+        <subject>SLA Warning: Case ${number} is at 80%</subject>
+        <message_html><![CDATA[<p>Attention: Case <b>${number}</b> has reached 80% of its SLA duration. Please prioritize resolution.</p>]]></message_html>
     </sys_notification>
     <sys_notification action="INSERT_OR_UPDATE">
         <name>NOTIF-005: SLA Breach Notification</name>
         <active>true</active>
         <collection>sn_customerservice_case</collection>
+        <subject>SLA BREACH: Case ${number}</subject>
+        <message_html><![CDATA[<p>The SLA for Case <b>${number}</b> has breached. Immediate action is required.</p>]]></message_html>
     </sys_notification>
     <sys_notification action="INSERT_OR_UPDATE">
         <name>NOTIF-006: Case Resolution Confirmation</name>
         <active>true</active>
         <collection>sn_customerservice_case</collection>
+        <subject>Case ${number} Resolved</subject>
+        <message_html><![CDATA[<p>Your case <b>${number}</b> has been marked as resolved. Please confirm or provide feedback.</p>]]></message_html>
     </sys_notification>
     <sys_notification action="INSERT_OR_UPDATE">
         <name>NOTIF-007: Customer Update Request</name>
         <active>true</active>
         <collection>sn_customerservice_case</collection>
+        <subject>Information Required for Case ${number}</subject>
+        <message_html><![CDATA[<p>We need more information to proceed with your case <b>${number}</b>. Please check the portal for details.</p>]]></message_html>
     </sys_notification>
     <sys_notification action="INSERT_OR_UPDATE">
         <name>NOTIF-008: VIP Priority Alert</name>
         <active>true</active>
         <collection>sn_customerservice_case</collection>
+        <subject>VIP Priority Case ${number} Assigned</subject>
+        <message_html><![CDATA[<p>A new VIP case <b>${number}</b> has been assigned to you. This requires immediate attention per enterprise policy.</p>]]></message_html>
     </sys_notification>
 
     <!-- LAYER 6: AUTOMATION (SLA/Schedules/Flows) -->

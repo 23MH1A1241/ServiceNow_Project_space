@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, Loader2, AlertCircle, Clock, Tag, FileText } from 'lucide-react';
-import { getCase, triggerAgentMatching } from '../api/serviceNow';
+import { getCase, triggerAgentMatching, submitCsat } from '../api/serviceNow';
 
 const TrackCase = () => {
   const [searchParams] = useSearchParams();
@@ -186,7 +186,12 @@ const TrackCase = () => {
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
                       key={star}
-                      onClick={() => setCsatRating(star)}
+                      onClick={async () => {
+                        setCsatRating(star);
+                        if (caseData?.sys_id) {
+                          await submitCsat(caseData.sys_id, star);
+                        }
+                      }}
                       className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl transition-all shadow-sm ${
                         csatRating >= star ? 'bg-yellow-400 text-white scale-110 shadow-yellow-200' : 'bg-white text-gray-300 border border-emerald-100 hover:border-yellow-300'
                       }`}
