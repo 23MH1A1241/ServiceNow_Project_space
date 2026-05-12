@@ -3,6 +3,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 /**
  * CaseFlow AI | Enterprise Neural Engine
  * High-performance Gemini-powered technical resolutions with local fallback.
+ * NOTE: LLM integration is utilized for technical guidance and knowledge 
+ * assistance ONLY, ensuring compliance with weighted routing scope.
  */
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;

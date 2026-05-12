@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <unload unload_date="2026-05-11 12:00:00">
     <!-- FULL PROJECT IMPLEMENTATION: SEVEN-LAYER ARCHITECTURE -->
+    <!-- LAYER 1: INGESTION (IntegrationHub & REST) -->
+    <sys_rest_message action="INSERT_OR_UPDATE">
+        <name>CaseFlow REST Ingestion</name>
+        <rest_endpoint>https://dev296999.service-now.com/api/sn_customerservice/v1/ingest</rest_endpoint>
+        <description>External ingestion endpoint for high-volume automated case creation.</description>
+    </sys_rest_message>
+
+    <sys_ws_definition action="INSERT_OR_UPDATE">
+        <name>CaseFlow Ingestion API</name>
+        <service_id>sn_customerservice/v1/ingest</service_id>
+    </sys_ws_definition>
 
     <!-- LAYER 1: INGESTION (IntegrationHub) -->
     <sys_script_include action="INSERT_OR_UPDATE">

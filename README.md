@@ -13,7 +13,7 @@ CaseFlow AI is a high-performance customer service portal designed for large-sca
 
 ## 🛠 Tech Stack
 
-- **Frontend**: React 18, Vite, Tailwind CSS, Lucide-React, Recharts.
+- **Frontend**: React 19, Vite, Tailwind CSS, Lucide-React, Recharts.
 - **Backend**: ServiceNow Scoped App (x_1939544_casefl_0).
 - **Integration**: ServiceNow REST APIs via secure Vite proxy.
 - **CI/CD**: GitHub Actions for automated build and validation.

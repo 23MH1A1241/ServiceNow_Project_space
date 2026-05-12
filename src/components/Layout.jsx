@@ -24,6 +24,10 @@ const Layout = () => {
       items.push({ name: 'Dashboard', path: '/portal/dashboard', icon: LayoutDashboard });
     }
     
+    if (user?.role === 'admin' || user?.role === 'supervisor') {
+      items.push({ name: 'Audit Logs', path: '/portal/audit-logs', icon: Search });
+    }
+    
     if (user?.role === 'admin') {
       items.push({ name: 'Agent SLA', path: '/portal/agent-sla', icon: TrendingUp });
     }
