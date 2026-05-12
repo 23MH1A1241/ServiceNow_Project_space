@@ -438,3 +438,18 @@ export const submitCsat = async (caseId, rating) => {
     return null;
   }
 };
+/**
+ * Fetches the SLA percentage for a specific case
+ */
+export const getCaseSlaPercentage = async (caseSysId) => {
+  try {
+    const response = await client.get(`/api/now/table/task_sla?sysparm_query=task=${caseSysId}^active=true&sysparm_fields=percentage&sysparm_limit=1`);
+    if (response.data.result && response.data.result.length > 0) {
+      return parseInt(response.data.result[0].percentage, 10);
+    }
+    return 0;
+  } catch (error) {
+    console.error('Error fetching case SLA:', error);
+    return 0;
+  }
+};

@@ -10,11 +10,15 @@ var IngestionLayer = Class.create();
 IngestionLayer.prototype = {
     initialize: function() {},
     processIncomingCase: function(payload) {
+        if (!payload || !payload.short_description) {
+            gs.error("CaseFlow Ingestion: Invalid payload received.");
+            return null;
+        }
         var caseGr = new GlideRecord('sn_customerservice_case');
         caseGr.initialize();
         caseGr.short_description = payload.short_description;
-        caseGr.description = payload.description;
-        caseGr.contact = payload.contact_id;
+        caseGr.description = payload.description || "";
+        caseGr.contact = payload.contact_id || "";
         new CaseCategorizationEngine().categorize(caseGr);
         return caseGr.insert();
     },
@@ -31,7 +35,9 @@ var CaseCategorizationEngine = Class.create();
 CaseCategorizationEngine.prototype = {
     initialize: function() {},
     categorize: function(current) {
-        var text = (current.short_description + " " + current.description).toLowerCase();
+        if (!current) return;
+        
+        var text = (current.short_description + " " + (current.description || "")).toLowerCase();
         var keywords = {
             "hardware": ["laptop", "monitor", "keyboard", "mouse", "printer", "battery", "hardware", "screen", "tablet", "docking", "webcam", "charger", "display", "hdd", "ram"],
             "network": ["wifi", "internet", "vpn", "connection", "network", "router", "dns", "ip", "ethernet", "firewall", "bandwidth", "latency", "signal", "port"],
@@ -81,6 +87,8 @@ var AgentMatchingUtil = Class.create();
 AgentMatchingUtil.prototype = {
     initialize: function() {},
     findBestAgent: function(caseGr) {
+        if (!caseGr || !caseGr.category) return null;
+
         var agents = new GlideRecord('sys_user');
         agents.addQuery('active', true);
         agents.addEncodedQuery('roles=sn_customerservice.agent');
@@ -112,7 +120,7 @@ AgentMatchingUtil.prototype = {
             if (agents.introduction != 'away' && agents.active) score += 20;
             
             // 4. Certification (10%)
-            if (agents.vip || agents.title.indexOf('Senior') > -1) score += 10;
+            if (agents.vip || (agents.title && agents.title.indexOf('Senior') > -1)) score += 10;
             
             if (score > highestScore) {
                 highestScore = score;
@@ -134,6 +142,7 @@ var SLACalculator = Class.create();
 SLACalculator.prototype = {
     initialize: function() {},
     calculateRisk: function(caseGr) {
+        if (!caseGr) return false;
         var sla = new GlideRecord('task_sla');
         sla.addQuery('task', caseGr.sys_id);
         sla.addQuery('active', true);
@@ -155,6 +164,7 @@ var AuditLogger = Class.create();
 AuditLogger.prototype = {
     initialize: function() {},
     logChange: function(caseGr, message) {
+        if (!caseGr || !caseGr.sys_id) return;
         var log = new GlideRecord('sys_audit');
         log.initialize();
         log.tablename = 'sn_customerservice_case';
@@ -191,12 +201,13 @@ EscalationManager.prototype = {
             else if (cases.priority == 2 && ageHours > 4) this._escalate(cases, 'ESC-002');
             else if (cases.reassignment_count > 3) this._escalate(cases, 'ESC-003');
             else if (new SLACalculator().calculateRisk(cases)) this._escalate(cases, 'ESC-004');
-            else if (cases.contact.vip && ageHours > 1) this._escalate(cases, 'ESC-005');
+            else if (cases.contact && cases.contact.vip && ageHours > 1) this._escalate(cases, 'ESC-005');
             else if (ageHours > 0.5 && !cases.assigned_to) this._escalate(cases, 'ESC-006');
-            else if (cases.short_description.toLowerCase().indexOf('escalate') > -1) this._escalate(cases, 'ESC-007');
+            else if (cases.short_description && cases.short_description.toLowerCase().indexOf('escalate') > -1) this._escalate(cases, 'ESC-007');
         }
     },
     _escalate: function(caseGr, ruleId) {
+        if (!caseGr) return;
         caseGr.escalation = 1;
         if (ruleId == 'ESC-001') caseGr.escalation = 2;
         caseGr.work_notes = "Auto-escalated by rule: " + ruleId;
@@ -316,14 +327,39 @@ new EscalationManager().checkEscalations();
     <!-- LAYER 7: TESTING (ATF) -->
     <sys_atf_test action="INSERT_OR_UPDATE">
         <name>ATF-001: AI Categorization Accuracy Test</name>
+        <description>Validates that the CaseCategorizationEngine correctly identifies categories from keywords.</description>
         <active>true</active>
     </sys_atf_test>
+    <sys_atf_test_step action="INSERT_OR_UPDATE">
+        <test>ATF-001: AI Categorization Accuracy Test</test>
+        <step_config>Run Server Side Script</step_config>
+        <value><![CDATA[
+(function(outputs, steps, stepResult, assertEqual) {
+    var testCase = new GlideRecord('sn_customerservice_case');
+    testCase.initialize();
+    testCase.short_description = "My laptop monitor is flickering";
+    new CaseCategorizationEngine().categorize(testCase);
+    assertEqual(testCase.category, "Hardware", "Should categorize as Hardware");
+    
+    testCase.short_description = "VPN connection failing";
+    new CaseCategorizationEngine().categorize(testCase);
+    assertEqual(testCase.category, "Network", "Should categorize as Network");
+    
+    stepResult.setOutputMessage("Categorization logic verified.");
+    return true;
+})(outputs, steps, stepResult, assertEqual);
+        ]]></value>
+    </sys_atf_test_step>
+
     <sys_atf_test action="INSERT_OR_UPDATE">
         <name>ATF-002: Agent Weighted Scoring Test</name>
+        <description>Verifies the AgentMatchingUtil correctly scores and selects the best agent.</description>
         <active>true</active>
     </sys_atf_test>
+    
     <sys_atf_test action="INSERT_OR_UPDATE">
         <name>ATF-003: Multi-Level Escalation Logic Test</name>
+        <description>Validates that EscalationManager triggers rules based on priority and age.</description>
         <active>true</active>
     </sys_atf_test>
 </unload>

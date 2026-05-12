@@ -18,7 +18,13 @@ vi.mock('axios', () => {
 });
 
 // Import AFTER mocking
-import { authenticateUser, fetchCustomerMetrics } from './serviceNow';
+import { 
+  authenticateUser, 
+  fetchCustomerMetrics, 
+  submitCsat, 
+  getCaseSlaPercentage,
+  fetchAgentMetrics
+} from './serviceNow';
 
 describe('serviceNow API', () => {
   const mockClient = axios.create();
@@ -55,5 +61,30 @@ describe('serviceNow API', () => {
     expect(metrics.open).toBe(2);
     expect(metrics.resolved).toBe(1);
     expect(metrics.escalated).toBe(1);
+  });
+
+  it('submitCsat should post feedback successfully', async () => {
+    mockClient.post.mockResolvedValue({ data: { result: { status: 'success' } } });
+    const result = await submitCsat('case123', 5);
+    expect(result.status).toBe('success');
+    expect(mockClient.post).toHaveBeenCalledWith(expect.stringContaining('case123'), expect.objectContaining({ u_csat_score: 5 }));
+  });
+
+  it('getCaseSlaPercentage should return percentage value', async () => {
+    mockClient.get.mockResolvedValue({ data: { result: [{ percentage: '75' }] } });
+    const percentage = await getCaseSlaPercentage('case123');
+    expect(percentage).toBe(75);
+  });
+
+  it('fetchAgentMetrics should aggregate agent-specific KPIs', async () => {
+    const mockCases = [
+      { priority: '1', escalation: '1', state: '2' },
+      { priority: '3', escalation: '0', state: '7' }
+    ];
+    mockClient.get.mockResolvedValue({ data: { result: mockCases } });
+    const metrics = await fetchAgentMetrics('agent1', 'id1');
+    expect(metrics.assigned).toBe(2);
+    expect(metrics.critical).toBe(1);
+    expect(metrics.resolved).toBe(1);
   });
 });

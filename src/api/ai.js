@@ -1,15 +1,43 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
 /**
  * CaseFlow AI | Enterprise Neural Engine
- * High-performance local simulation for real-time technical resolutions.
+ * High-performance Gemini-powered technical resolutions with local fallback.
  */
 
-export const getAIResolution = async (query, role = 'customer', context = {}) => {
-  // Artificial delay to simulate "thinking"
-  await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 1200));
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
 
+export const getAIResolution = async (query, role = 'customer', context = {}) => {
+  if (!genAI) {
+    return getLocalAIResolution(query);
+  }
+
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const prompt = `
+      You are CaseFlow AI, an enterprise technical support assistant. 
+      Context: User is a ${role}. 
+      Case Info: ${JSON.stringify(context)}.
+      
+      User asks: "${query}"
+      
+      Provide a concise, professional, and accurate technical resolution. 
+      If you can't solve it, suggest next steps like raising a ticket.
+    `;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error("Gemini AI Engine failed, falling back to local core:", error);
+    return getLocalAIResolution(query);
+  }
+};
+
+const getLocalAIResolution = (query) => {
   const q = query.toLowerCase();
   
-  // Natural Language Scenarios
   const scenarios = [
     {
       keywords: ['hi', 'hello', 'hey', 'greetings'],
@@ -37,13 +65,6 @@ export const getAIResolution = async (query, role = 'customer', context = {}) =>
     }
   ];
 
-  // Find matching scenario
   const match = scenarios.find(s => s.keywords.some(k => q.includes(k)));
-
-  if (match) {
-    return match.response;
-  }
-
-  // General Fallback (Very human and helpful)
-  return `I've looked into your request regarding "${query}". While I don't have a specific automated fix for this right now, I recommend trying a quick restart of your application or device as a first step. \n\nIf the problem persists, please click the button below to raise a case so one of our human experts can take a look for you!`;
+  return match ? match.response : `I've looked into your request regarding "${query}". I recommend a quick restart of your device. If the problem persists, please raise a case for human expert review.`;
 };
