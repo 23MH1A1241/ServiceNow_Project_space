@@ -5,8 +5,25 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('sn_user_session');
-    return savedUser ? JSON.parse(savedUser) : null;
+    try {
+      const savedUser = localStorage.getItem('sn_user_session');
+      if (!savedUser) return null;
+      
+      // Basic obfuscation to avoid plaintext PII in localStorage
+      const decoded = JSON.parse(atob(savedUser));
+      
+      // Session expiry check (8 hours)
+      const now = new Date().getTime();
+      if (decoded.expiry && now > decoded.expiry) {
+        localStorage.removeItem('sn_user_session');
+        return null;
+      }
+      
+      return decoded.user;
+    } catch (e) {
+      console.error("Session restore failed", e);
+      return null;
+    }
   });
   const [loading, setLoading] = useState(false);
 
@@ -15,7 +32,14 @@ export const AuthProvider = ({ children }) => {
     try {
       const userData = await authenticateUser(username, password);
       setUser(userData);
-      localStorage.setItem('sn_user_session', JSON.stringify(userData));
+      
+      // Store obfuscated session with 8-hour expiry
+      const sessionData = {
+        user: userData,
+        expiry: new Date().getTime() + (8 * 60 * 60 * 1000)
+      };
+      localStorage.setItem('sn_user_session', btoa(JSON.stringify(sessionData)));
+      
       return userData;
     } finally {
       setLoading(false);

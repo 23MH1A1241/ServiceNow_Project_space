@@ -166,6 +166,8 @@ export const fetchAdminMetrics = async () => {
       open: cases.filter(c => c.state === '1' || c.state === '2').length,
       resolved: cases.filter(c => c.state === '3' || c.state === '7').length,
       escalated: cases.filter(c => c.escalation === '1' || c.escalation === '2').length,
+      active: cases.filter(c => c.state === '1' || c.state === '2').length, // Added for dashboard consistency
+      critical: cases.filter(c => c.priority === '1').length, // Added for dashboard consistency
       priorityDistribution: {
         p1: cases.filter(c => c.priority === '1').length,
         p2: cases.filter(c => c.priority === '2').length,
@@ -173,11 +175,40 @@ export const fetchAdminMetrics = async () => {
         p4: cases.filter(c => c.priority === '4').length,
       },
       activeUsers: 42, // Default fallback
-      all: cases
+      all: cases,
+      recent: cases.slice(0, 10)
     };
   } catch (error) {
     console.error('Error fetching admin metrics:', error);
-    return { total: 0, open: 0, resolved: 0, escalated: 0, priorityDistribution: {p1:0, p2:0, p3:0, p4:0}, activeUsers: 0, all: [] };
+    return { total: 0, open: 0, resolved: 0, escalated: 0, priorityDistribution: {p1:0, p2:0, p3:0, p4:0}, activeUsers: 0, all: [], recent: [] };
+  }
+};
+
+/**
+ * Unified Dashboard Metrics Wrapper
+ */
+export const getDashboardMetrics = async (role, identifier) => {
+  switch (role) {
+    case 'admin':
+      return await fetchAdminMetrics();
+    case 'supervisor':
+      const supervisorData = await fetchSupervisorMetrics();
+      return {
+        ...supervisorData,
+        active: supervisorData.totalActive,
+        critical: supervisorData.criticalAlerts
+      };
+    case 'agent':
+      const agentData = await fetchAgentMetrics(null, identifier);
+      return {
+        ...agentData,
+        active: agentData.assigned,
+        critical: agentData.critical
+      };
+    case 'customer':
+      return await fetchCustomerMetrics(identifier);
+    default:
+      throw new Error('Invalid role for metrics');
   }
 };
 
@@ -451,5 +482,18 @@ export const getCaseSlaPercentage = async (caseSysId) => {
   } catch (error) {
     console.error('Error fetching case SLA:', error);
     return 0;
+  }
+};
+
+/**
+ * Fetch System Audit Logs
+ */
+export const fetchAuditLogs = async () => {
+  try {
+    const response = await client.get(`/api/now/table/sys_audit?sysparm_query=ORDERBYDESCsys_created_on&sysparm_limit=50`);
+    return response.data.result || [];
+  } catch (error) {
+    console.error('Error fetching audit logs:', error);
+    return [];
   }
 };

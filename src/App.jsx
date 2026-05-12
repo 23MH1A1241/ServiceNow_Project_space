@@ -15,6 +15,7 @@ import Escalations from './pages/Escalations';
 import Notifications from './pages/Notifications';
 import SlaMonitoring from './pages/SlaMonitoring';
 import AgentSlaTracking from './pages/AgentSlaTracking';
+import AuditLogs from './pages/AuditLogs';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -57,6 +58,7 @@ const App = () => {
           <Route path="sla-monitoring" element={<SlaMonitoring />} />
           <Route path="agent-sla" element={<AgentSlaTracking />} />
           <Route path="escalations" element={<Escalations />} />
+          <Route path="audit-logs" element={<AuditLogs />} />
         </Route>
         
         {/* Redirect unknown routes to landing */}

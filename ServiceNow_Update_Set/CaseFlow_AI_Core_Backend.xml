@@ -61,7 +61,19 @@ CaseCategorizationEngine.prototype = {
         }
         
         current.category = category;
-        if (text.indexOf('outage') > -1 || text.indexOf('breach') > -1 || text.indexOf('critical') > -1 || text.indexOf('urgent') > -1 || text.indexOf('emergency') > -1) {
+
+        // Customer Tier Lookup
+        var isVIP = false;
+        if (current.contact) {
+            var contactGr = new GlideRecord('customer_contact');
+            if (contactGr.get(current.contact)) {
+                if (contactGr.vip == true || contactGr.u_tier == 'Gold' || contactGr.u_tier == 'Platinum') {
+                    isVIP = true;
+                }
+            }
+        }
+
+        if (text.indexOf('outage') > -1 || text.indexOf('breach') > -1 || text.indexOf('critical') > -1 || isVIP) {
             current.priority = 1;
             current.impact = 1;
             current.urgency = 1;
@@ -300,6 +312,17 @@ EscalationManager.prototype = {
     <sys_hub_flow action="INSERT_OR_UPDATE">
         <name>CaseFlow: Intelligent Routing Flow</name>
         <active>true</active>
+        <description>Automates the ingestion, classification, and assignment of incoming cases using AI engines.</description>
+        <script><![CDATA[
+// LOGICAL FLOW STRUCTURE:
+// 1. TRIGGER: Record Created (sn_customerservice_case)
+// 2. ACTION: Call CaseCategorizationEngine.categorize()
+// 3. ACTION: Call AgentMatchingUtil.findBestAgent()
+// 4. ACTION: Update Record with Category and Assigned To
+// 5. ACTION: Send NOTIF-001 Acknowledgement
+// 6. ACTION: Wait for SLA Breach (80%) -> Trigger NOTIF-004
+// 7. ACTION: Wait for Resolution -> Send NOTIF-006
+        ]]></script>
     </sys_hub_flow>
 
     <sys_script action="INSERT_OR_UPDATE">
@@ -356,10 +379,41 @@ new EscalationManager().checkEscalations();
         <description>Verifies the AgentMatchingUtil correctly scores and selects the best agent.</description>
         <active>true</active>
     </sys_atf_test>
+    <sys_atf_test_step action="INSERT_OR_UPDATE">
+        <test>ATF-002: Agent Weighted Scoring Test</test>
+        <step_config>Run Server Side Script</step_config>
+        <value><![CDATA[
+(function(outputs, steps, stepResult, assertEqual) {
+    var testCase = new GlideRecord('sn_customerservice_case');
+    testCase.initialize();
+    testCase.category = "Hardware";
+    var agent = new AgentMatchingUtil().findBestAgent(testCase);
+    assertEqual(agent !== null, true, "Should find a suitable agent");
+    stepResult.setOutputMessage("Weighted agent matching verified.");
+    return true;
+})(outputs, steps, stepResult, assertEqual);
+        ]]></value>
+    </sys_atf_test_step>
     
     <sys_atf_test action="INSERT_OR_UPDATE">
         <name>ATF-003: Multi-Level Escalation Logic Test</name>
         <description>Validates that EscalationManager triggers rules based on priority and age.</description>
         <active>true</active>
     </sys_atf_test>
+    <sys_atf_test_step action="INSERT_OR_UPDATE">
+        <test>ATF-003: Multi-Level Escalation Logic Test</test>
+        <step_config>Run Server Side Script</step_config>
+        <value><![CDATA[
+(function(outputs, steps, stepResult, assertEqual) {
+    var testCase = new GlideRecord('sn_customerservice_case');
+    testCase.initialize();
+    testCase.priority = 1;
+    // Simulate time passing (manual escalation check call)
+    new EscalationManager()._escalate(testCase, 'ESC-001');
+    assertEqual(testCase.escalation, 2, "P1 should escalate to Level 2");
+    stepResult.setOutputMessage("Escalation rules verified.");
+    return true;
+})(outputs, steps, stepResult, assertEqual);
+        ]]></value>
+    </sys_atf_test_step>
 </unload>

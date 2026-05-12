@@ -5,7 +5,7 @@ import { Buffer } from 'node:buffer';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const authHeader = 'Basic ' + Buffer.from(`${env.SN_USERNAME}:${env.SN_PASSWORD}`).toString('base64');
+  const getAuthHeader = () => 'Basic ' + Buffer.from(`${env.SN_USERNAME}:${env.SN_PASSWORD}`).toString('base64');
 
   return {
     plugins: [react()],
@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
         secure: false,
         configure: (proxy) => {
           proxy.on('proxyReq', (proxyReq) => {
-            proxyReq.setHeader('Authorization', authHeader);
+            proxyReq.setHeader('Authorization', getAuthHeader());
             proxyReq.setHeader('Content-Type', 'application/json');
             proxyReq.setHeader('Accept', 'application/json');
           });
@@ -45,7 +45,7 @@ export default defineConfig(({ mode }) => {
         configure: (proxy) => {
           proxy.on('proxyReq', (proxyReq) => {
              // For the VA client API, we also need auth if we want it to work without the user logging into SN separately
-             proxyReq.setHeader('Authorization', authHeader);
+             proxyReq.setHeader('Authorization', getAuthHeader());
           });
         }
       },
